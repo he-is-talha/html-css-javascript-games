@@ -1,0 +1,90 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background-color: lightslategray;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+h1 {
+  color: white;
+  font-size: 32px;
+  padding: 5px 50px;
+  background-color: black;
+  border-radius: 50px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  word-spacing: 3px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  border: 2px solid black;
+}
+
+.box {
+  width: 120px;
+  height: 120px;
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 25px;
+}
+
+.box img {
+  width: 75px;
+}
+
+.status {
+  margin: 20px 0;
+  padding: 10px 40px;
+  border-radius: 50px;
+  font-size: 20px;
+  font-weight: 500;
+  background-color: white;
+  color: black;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: 500;
+  color: white;
+  background-color: black;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(0.9);
+}
+
+.win {
+  animation: winAnim ease-in-out 1s infinite;
+}
+
+@keyframes winAnim {
+  0% {
+    background-color: green;
+  }
+  100% {
+    background-color: lightgreen;
+  }
+}

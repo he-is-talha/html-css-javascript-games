@@ -1,0 +1,143 @@
+@import url(https://fonts.googleapis.com/css?family=Gotu);
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Gotu", sans-serif;
+  font-weight: normal;
+  font-size: 18px;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  color: #414244;
+}
+
+main {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+}
+
+.quote-display {
+  position: relative;
+  grid-row: 1/2;
+  align-self: end;
+}
+.quote-display span {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: 0.1rem;
+}
+.quote-display::before {
+  content: open-quote;
+  position: absolute;
+  top: -5rem;
+  left: -2rem;
+  z-index: -1;
+  font-size: 10rem;
+  color: #d7d7d8;
+}
+
+.typing {
+  position: relative;
+  grid-row: 2/-1;
+  display: grid;
+  grid-template-columns: 33% auto 2rem auto 2rem;
+  align-items: start;
+  width: 100%;
+  height: 100%;
+}
+.typing:hover hr {
+  width: 75%;
+}
+
+hr {
+  grid-column: 1/-1;
+  margin-top: 1rem;
+  border: 0.25rem solid #4fb578;
+  width: 25%;
+  transition: width 300ms ease-in-out;
+  outline: 0;
+}
+
+.score {
+  position: relative;
+  grid-column: 3/-2;
+  display: flex;
+  justify-content: space-between;
+  z-index: 2;
+  width: 100%;
+  margin-top: -1.375rem;
+  margin-bottom: -1rem;
+  background: #fff;
+  padding: 0.25rem 2rem;
+  box-shadow: 0 3px 6px rgba(52, 31, 97, 0.16), 0 3px 6px rgba(52, 31, 97, 0.23);
+}
+
+.quote-input {
+  grid-column: 2/-1;
+  height: calc(50vh - 4rem);
+  width: 100%;
+  padding: 0 1rem;
+  padding-top: 2rem;
+  background: #fff;
+  border: 0;
+  border-radius: 0.2rem;
+  resize: none;
+  outline: none;
+  transition: border 300ms ease-in-out;
+}
+.quote-input::placeholder {
+  color: #d7d7d8;
+  transition: color 300ms ease-in-out;
+}
+.quote-input:hover::placeholder {
+  color: #4fb578;
+}
+
+.right {
+  color: #4fb578;
+}
+
+.wrong {
+  color: #b55648;
+  text-decoration: line-through;
+}
+
+.halp {
+  position: relative;
+  border-color: #b55648;
+  animation: glitch 300ms;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translateY(-2%);
+    border-color: #414244;
+    box-shadow: -1.5px 2.5px #4fa5b5;
+  }
+  15% {
+    transform: translateY(5%);
+    box-shadow: 2px -1px #d87dbb;
+  }
+  45% {
+    border-color: #d7d7d8;
+    box-shadow: 0.5px -2px #d7d7d8;
+  }
+  85% {
+    border-color: #b55648;
+    box-shadow: 1px -1.5px #d87dbb;
+  }
+  100% {
+    transform: translateX(-1%);
+    box-shadow: -0.5px 0.5px #4fa5b5;
+  }
+}
