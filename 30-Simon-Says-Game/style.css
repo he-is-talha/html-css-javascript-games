@@ -1,0 +1,110 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f4f4f9;
+  text-align: center;
+  padding: 50px;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+#game-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.color-btn {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  margin: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+#green {
+  background-color: green;
+}
+
+#red {
+  background-color: red;
+}
+
+#yellow {
+  background-color: yellow;
+}
+
+#blue {
+  background-color: blue;
+}
+
+.color-btn.active {
+  transform: scale(1.1);
+}
+
+#game-status {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+#start-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#start-btn:hover {
+  background-color: #45a049;
+}
+
+#status {
+  font-weight: bold;
+}
+
+#level-message {
+  font-size: 24px;
+  font-weight: bold;
+  color: green;
+  text-align: center;
+  margin-top: 20px;
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.5s ease-in-out;
+  display: none; /* Make sure it's hidden initially */
+}
+
+#level-message.show {
+  opacity: 1; /* Fade in the message */
+  display: block; /* Make it visible */
+}
+
+.my-text {
+  font-size: 1.5rem;
+  margin-top: 20px;
+  color: #333;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  display: none;
+}
+.my-text.show {
+  opacity: 1;
+  display: block;
+  transition: opacity 0.5s ease-in-out;
+}
