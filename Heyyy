@@ -1,0 +1,341 @@
+<!DOCTYPE html><html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>لعبة لبس - أوفلاين (وضوح ملامح)</title>
+  <style>
+    :root{--bg:#0b0f14;--panel:#09101a;--accent:#1e90ff}
+    html,body{height:100%;margin:0;background:var(--bg);color:#e6eef8;font-family:Arial,Helvetica,sans-serif}
+    .app{display:flex;gap:12px;height:100vh;padding:12px;box-sizing:border-box}
+    .left{width:64%;background:linear-gradient(180deg,#071021 0%, #051018 100%);border-radius:12px;padding:12px;position:relative}
+    .right{width:36%;display:flex;flex-direction:column;gap:12px}
+    .panel{background:var(--panel);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.5)}
+    canvas{width:100%;height:100%;display:block;border-radius:8px;background:transparent}
+    h2{margin:4px 0 10px 0;font-size:16px}
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    button{background:var(--accent);border:none;color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
+    .thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-height:360px;overflow:auto;padding:6px}
+    .thumb{background:#071422;border-radius:8px;padding:6px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .small{font-size:13px;color:#bcd}
+    label{display:block;font-size:13px;margin-bottom:6px}
+    .row{display:flex;gap:8px;align-items:center}
+    input[type=range]{width:100%}
+    .saveRow{display:flex;gap:8px}
+    .slot{background:#06111a;padding:8px;border-radius:8px}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="left panel">
+      <h2>عارض الشخصية — دوران، تكبير، وملامح واضحة</h2>
+      <canvas id="view"></canvas>
+      <div style="position:absolute;left:18px;bottom:18px;background:rgba(0,0,0,0.35);padding:8px;border-radius:8px">
+        <div class="row" style="align-items:center;gap:12px">
+          <div class="small">الدوران:</div>
+          <input id="rot" type="range" min="-180" max="180" value="0">
+          <div class="small">تكبير:</div>
+          <input id="zoom" type="range" min="0.6" max="1.6" step="0.01" value="1">
+        </div>
+      </div>
+    </div><div class="right">
+  <div class="panel">
+    <h2>إعدادات عامة</h2>
+    <div class="controls">
+      <div class="slot">
+        <label>الجنس</label>
+        <button id="maleBtn">ذكر</button>
+        <button id="femaleBtn">انثى</button>
+      </div>
+      <div class="slot">
+        <label>لون البشرة</label>
+        <input id="skin" type="color" value="#f1c27d">
+      </div>
+      <div class="slot">
+        <label>لون الشعر</label>
+        <input id="hair" type="color" value="#3b2f2f">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>ملابس — اختر من 30 خيار</h2>
+    <div class="thumbs" id="thumbs"></div>
+  </div>
+
+  <div class="panel">
+    <h2>تفصيل الملامح</h2>
+    <div class="row" style="flex-direction:column;gap:8px">
+      <label>شكل العين (1-5)</label>
+      <input id="eye" type="range" min="1" max="5" value="2">
+      <label>فم (1-4)</label>
+      <input id="mouth" type="range" min="1" max="4" value="2">
+      <label>حجم الأنف</label>
+      <input id="nose" type="range" min="0.6" max="1.4" step="0.01" value="1">
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>حفظ / تحميل الإطلالة</h2>
+    <div class="saveRow">
+      <input id="saveName" placeholder="اسم الحفظ" style="flex:1;padding:8px;border-radius:8px;border:none;background:#05101a;color:#eaf" />
+      <button id="saveBtn">حفظ</button>
+    </div>
+    <div style="margin-top:8px" class="small">سجلاتك:</div>
+    <div id="savelist" style="max-height:140px;overflow:auto;margin-top:6px" class="small"></div>
+    <div style="margin-top:8px" class="row small">يمكنك أيضاً تصدير الصورة: <button id="exportBtn">تصدير PNG</button></div>
+  </div>
+</div>
+
+  </div><script>
+// Offline character wardrobe prototype (2.5D with clear facial features)
+const canvas = document.getElementById('view');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize(){ W = canvas.width = canvas.clientWidth * devicePixelRatio; H = canvas.height = canvas.clientHeight * devicePixelRatio; ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); }
+window.addEventListener('resize', resize); resize();
+
+// State
+let state = {
+  gender: 'male',
+  skin: '#f1c27d',
+  hair: '#3b2f2f',
+  outfit: 0,
+  eye: 2,
+  mouth: 2,
+  nose: 1,
+  rot: 0,
+  zoom: 1
+};
+
+// generate 30 outfit presets (procedural) — each has top, bottom, shoes, hat, color scheme
+const outfits = [];
+const topTypes = ['tshirt','shirt','jacket','hoodie','vest'];
+const bottomTypes = ['jeans','shorts','pants','skirt'];
+const hats = ['none','cap','beanie','hat'];
+const colors = ['#e63946','#f4a261','#2a9d8f','#457b9d','#8d99ae','#a8dadc','#ffb703','#fb8500'];
+for(let i=0;i<30;i++){
+  outfits.push({
+    id:i,
+    top: topTypes[i % topTypes.length],
+    bottom: bottomTypes[i % bottomTypes.length],
+    hat: hats[i % hats.length],
+    color: colors[i % colors.length],
+    accent: colors[(i+3) % colors.length]
+  });
+}
+
+// UI refs
+const thumbs = document.getElementById('thumbs');
+const maleBtn = document.getElementById('maleBtn');
+const femaleBtn = document.getElementById('femaleBtn');
+const skinInp = document.getElementById('skin');
+const hairInp = document.getElementById('hair');
+const rotInp = document.getElementById('rot');
+const zoomInp = document.getElementById('zoom');
+const eyeInp = document.getElementById('eye');
+const mouthInp = document.getElementById('mouth');
+const noseInp = document.getElementById('nose');
+const saveBtn = document.getElementById('saveBtn');
+const saveName = document.getElementById('saveName');
+const savelist = document.getElementById('savelist');
+const exportBtn = document.getElementById('exportBtn');
+
+// populate thumbs
+function renderThumb(o){
+  const el = document.createElement('div'); el.className='thumb'; el.title = o.top + ' / ' + o.bottom;
+  el.onclick = ()=>{ state.outfit = o.id; draw(); };
+  // draw mini-preview on canvas
+  const c = document.createElement('canvas'); c.width=140; c.height=140; c.style.width='80%'; c.style.height='80%';
+  const g = c.getContext('2d');
+  // background
+  g.fillStyle = '#061218'; g.fillRect(0,0,c.width,c.height);
+  // simple body
+  g.save(); g.translate(c.width/2, c.height/2 + 12);
+  // torso
+  g.fillStyle = o.color; g.fillRect(-22,-18,44,36);
+  // head
+  g.fillStyle = '#f1c27d'; g.beginPath(); g.ellipse(0,-36,18,20,0,0,Math.PI*2); g.fill();
+  // hair
+  g.fillStyle = '#3b2f2f'; g.fillRect(-18,-50,36,14);
+  g.restore();
+  el.appendChild(c);
+  return el;
+}
+for(const o of outfits) thumbs.appendChild(renderThumb(o));
+
+// interaction
+maleBtn.onclick = ()=>{ state.gender='male'; draw(); };
+femaleBtn.onclick = ()=>{ state.gender='female'; draw(); };
+skinInp.oninput = (e)=>{ state.skin = e.target.value; draw(); };
+hairInp.oninput = (e)=>{ state.hair = e.target.value; draw(); };
+rotInp.oninput = (e)=>{ state.rot = parseFloat(e.target.value) * Math.PI/180; draw(); };
+zoomInp.oninput = (e)=>{ state.zoom = parseFloat(e.target.value); draw(); };
+eyeInp.oninput = (e)=>{ state.eye = parseInt(e.target.value); draw(); };
+mouthInp.oninput = (e)=>{ state.mouth = parseInt(e.target.value); draw(); };
+noseInp.oninput = (e)=>{ state.nose = parseFloat(e.target.value); draw(); };
+
+// draw routine — 2.5D with shading for clearer facial features
+function draw(){
+  // clear
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const Wc = canvas.clientWidth; const Hc = canvas.clientHeight;
+  // center transform
+  ctx.save(); ctx.translate(Wc/2, Hc/2 + 40);
+  ctx.scale(state.zoom, state.zoom);
+  // apply rotation pseudo-3D (skew)
+  const r = state.rot; const sx = Math.cos(r); const sz = Math.sin(r);
+
+  // draw shadow
+  ctx.beginPath(); ctx.ellipse(0, 140, 90, 22, 0,0,Math.PI*2); ctx.fillStyle='rgba(0,0,0,0.25)'; ctx.fill();
+
+  // body (torso)
+  const outfit = outfits[state.outfit];
+  // torso draw with slight 3D effect
+  ctx.save();
+  ctx.translate(0,40);
+  // shoulders and chest
+  ctx.fillStyle = outfit.color; ctx.strokeStyle = '#00000022';
+  roundRect(ctx, -70, -30, 140, 120, 20); ctx.fill();
+  ctx.restore();
+
+  // neck
+  ctx.fillStyle = state.skin; ctx.beginPath(); ctx.ellipse(0,18,18,12,0,0,Math.PI*2); ctx.fill();
+
+  // head
+  ctx.save();
+  ctx.translate(0,-40);
+  // head shape
+  ctx.fillStyle = state.skin; ctx.beginPath(); ctx.ellipse(0,0,56,70,0,0,Math.PI*2); ctx.fill();
+  // subtle shading
+  const g = ctx.createLinearGradient(-56,-70,56,70); g.addColorStop(0,'rgba(0,0,0,0)'); g.addColorStop(1,'rgba(0,0,0,0.08)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0,0,56,70,0,0,Math.PI*2); ctx.fill();
+
+  // hair (top)
+  ctx.fillStyle = state.hair; ctx.beginPath(); ctx.ellipse(0,-24,58,38,0,Math.PI,Math.PI*2); ctx.fill();
+  // hair side
+  ctx.fillRect(-58,-16,116,28);
+
+  // face features based on sliders
+  drawEyes(ctx, state.eye);
+  drawNose(ctx, state.nose);
+  drawMouth(ctx, state.mouth);
+
+  // ears
+  ctx.fillStyle = state.skin; ctx.beginPath(); ctx.ellipse(-58,-6,8,12,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(58,-6,8,12,0,0,Math.PI*2); ctx.fill();
+
+  ctx.restore();
+
+  // draw outfit details (collar, sleeves)
+  drawOutfitDetails(ctx, outfit);
+
+  ctx.restore();
+}
+
+function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+
+function drawEyes(ctx, style){
+  ctx.save(); ctx.translate(0,-34);
+  const ex = 22, ey = -2;
+  ctx.fillStyle = '#fff';
+  // left
+  ctx.beginPath(); ctx.ellipse(-ex,ey,12,8,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(ex,ey,12,8,0,0,Math.PI*2); ctx.fill();
+  // pupils and style
+  ctx.fillStyle = '#222';
+  const pupilSize = style === 1 ? 6 : style===2?7: style===3?9: style===4?11:13;
+  ctx.beginPath(); ctx.arc(-ex,ey,pupilSize,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(ex,ey,pupilSize,0,Math.PI*2); ctx.fill();
+  // eyebrows
+  ctx.strokeStyle = '#402c2c'; ctx.lineWidth=4; ctx.lineCap='round';
+  if(style<=2){ ctx.beginPath(); ctx.moveTo(-ex-12,ey-18); ctx.lineTo(-ex+12,ey-12); ctx.stroke(); ctx.beginPath(); ctx.moveTo(ex-12,ey-12); ctx.lineTo(ex+12,ey-18); ctx.stroke(); }
+  else if(style<=4){ ctx.beginPath(); ctx.moveTo(-ex-12,ey-18); ctx.lineTo(-ex+12,ey-18); ctx.stroke(); ctx.beginPath(); ctx.moveTo(ex-12,ey-18); ctx.lineTo(ex+12,ey-18); ctx.stroke(); }
+  else { ctx.beginPath(); ctx.moveTo(-ex-20,ey-16); ctx.quadraticCurveTo(-ex,ey-6,-ex+20,ey-16); ctx.stroke(); ctx.beginPath(); ctx.moveTo(ex-20,ey-16); ctx.quadraticCurveTo(ex,ey-6,ex+20,ey-16); ctx.stroke(); }
+  ctx.restore();
+}
+
+function drawNose(ctx, scale){
+  ctx.save(); ctx.translate(0,-20);
+  ctx.fillStyle = '#d8b08933';
+  ctx.beginPath(); ctx.moveTo(0,-2); ctx.quadraticCurveTo(6*scale,10,0,18); ctx.quadraticCurveTo(-6*scale,10,0,-2); ctx.fill();
+  ctx.restore();
+}
+
+function drawMouth(ctx, style){
+  ctx.save(); ctx.translate(0,-2);
+  ctx.strokeStyle = '#8b3a3a'; ctx.lineWidth=3; ctx.lineCap='round';
+  if(style===1){ ctx.beginPath(); ctx.moveTo(-12,10); ctx.quadraticCurveTo(0,6,12,10); ctx.stroke(); }
+  else if(style===2){ ctx.beginPath(); ctx.moveTo(-14,8); ctx.quadraticCurveTo(0,14,14,8); ctx.stroke(); }
+  else if(style===3){ ctx.fillStyle='#8b3a3a'; ctx.beginPath(); ctx.ellipse(0,10,14,8,0,0,Math.PI*2); ctx.fill(); }
+  else { ctx.fillStyle='#ff7b7b'; ctx.beginPath(); ctx.ellipse(0,12,16,10,0,0,Math.PI*2); ctx.fill(); }
+  ctx.restore();
+}
+
+function drawOutfitDetails(ctx, outfit){
+  ctx.save(); ctx.translate(0,40);
+  // collar
+  ctx.fillStyle = darken(outfit.color, -20);
+  ctx.beginPath(); ctx.moveTo(-64,-18); ctx.quadraticCurveTo(0,-36,64,-18); ctx.lineTo(64,10); ctx.lineTo(-64,10); ctx.closePath(); ctx.fill();
+  // sleeves
+  ctx.fillStyle = outfit.color; ctx.fillRect(-86,10,30,60); ctx.fillRect(56,10,30,60);
+  // bottom (pants)
+  ctx.fillStyle = outfit.accent; ctx.fillRect(-70,80,140,120);
+  // hat
+  if(outfit.hat!=='none'){
+    ctx.fillStyle = darken(state.hair, -10); ctx.beginPath(); ctx.ellipse(0,-68,68,30,0,Math.PI,Math.PI*2); ctx.fill();
+    if(outfit.hat==='cap'){ ctx.fillStyle=darken(outfit.color,-10); ctx.fillRect(-34,-68,68,18); }
+  }
+  ctx.restore();
+}
+
+function darken(hex, amt){
+  const c = hex.replace('#',''); const num = parseInt(c,16);
+  let r = (num >> 16) + amt; let g = ((num >> 8) & 0x00FF) + amt; let b = (num & 0x0000FF) + amt;
+  r=Math.max(0,Math.min(255,r)); g=Math.max(0,Math.min(255,g)); b=Math.max(0,Math.min(255,b));
+  return '#'+( (r<<16) | (g<<8) | b ).toString(16).padStart(6,'0');
+}
+
+// save/load outfits to localStorage
+function savePreset(name){ if(!name) name = 'look-'+Date.now(); const data = JSON.stringify(state); localStorage.setItem('look-'+name,data); renderSaveList(); }
+function loadPreset(key){ const data = localStorage.getItem(key); if(!data) return; state = JSON.parse(data); // update inputs
+  skinInp.value=state.skin; hairInp.value=state.hair; rotInp.value = (state.rot*180/Math.PI).toFixed(0); zoomInp.value=state.zoom; eyeInp.value=state.eye; mouthInp.value=state.mouth; noseInp.value=state.nose;
+  draw(); }
+function deletePreset(key){ localStorage.removeItem(key); renderSaveList(); }
+
+function renderSaveList(){ savelist.innerHTML='';
+  for(let i=0;i<localStorage.length;i++){
+    const k = localStorage.key(i);
+    if(!k.startsWith('look-')) continue;
+    const btn = document.createElement('div'); btn.className='small row'; btn.style.justifyContent='space-between';
+    const name = k.replace('look-',''); const left = document.createElement('div'); left.textContent = name; left.style.flex='1';
+    const load = document.createElement('button'); load.textContent='تحميل'; load.onclick=()=>loadPreset(k);
+    const del = document.createElement('button'); del.textContent='حذف'; del.style.background='#ff5555'; del.onclick=()=>{ deletePreset(k); };
+    btn.appendChild(left); btn.appendChild(load); btn.appendChild(del);
+    savelist.appendChild(btn);
+  }
+}
+
+saveBtn.onclick = ()=>{ const n = saveName.value.trim() || ('look-'+new Date().toISOString().slice(0,19)); savePreset(n); saveName.value=''; }
+renderSaveList();
+
+exportBtn.onclick = ()=>{ // render to PNG
+  const w = canvas.clientWidth; const h = canvas.clientHeight; const tmp = document.createElement('canvas'); tmp.width = w*devicePixelRatio; tmp.height = h*devicePixelRatio; const g = tmp.getContext('2d'); g.scale(devicePixelRatio,devicePixelRatio); g.drawImage(canvas,0,0);
+  tmp.toBlob(b=>{ const url = URL.createObjectURL(b); const a = document.createElement('a'); a.href = url; a.download = 'character.png'; a.click(); URL.revokeObjectURL(url); });
+}
+
+// initial draw
+// set some defaults
+rotInp.value = 0; zoomInp.value = 1; draw();
+
+// simple drag rotate
+let dragging=false, lastX=0;
+canvas.addEventListener('pointerdown',(e)=>{ dragging=true; lastX=e.clientX; canvas.setPointerCapture(e.pointerId); });
+canvas.addEventListener('pointerup',(e)=>{ dragging=false; canvas.releasePointerCapture(e.pointerId); });
+canvas.addEventListener('pointermove',(e)=>{ if(dragging){ const dx = e.clientX - lastX; lastX = e.clientX; state.rot += dx * 0.006; rotInp.value = Math.round(state.rot*180/Math.PI); draw(); } });
+
+// ensure high-DPI draw
+function animationLoop(){ draw(); requestAnimationFrame(animationLoop); }
+requestAnimationFrame(animationLoop);
+
+</script></body>
+</html>
