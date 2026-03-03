@@ -74,6 +74,55 @@ let score = 0;
 let lives = 3;
 let gameOver = false;
 let lastTime = 0;
+let gameTime = 0; // for mouth animation
+
+// --- Sound (Web Audio API, no external files) ---
+let audioCtx = null;
+
+function getAudioContext() {
+  if (audioCtx) return audioCtx;
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  audioCtx = new Ctx();
+  return audioCtx;
+}
+
+function playPelletSound() {
+  const ctx = getAudioContext();
+  if (!ctx) return;
+  try {
+    ctx.resume();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = "square";
+    osc.frequency.setValueAtTime(680, ctx.currentTime);
+    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.06);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.06);
+  } catch (_) {}
+}
+
+function playDeathSound() {
+  const ctx = getAudioContext();
+  if (!ctx) return;
+  try {
+    ctx.resume();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(220, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(55, ctx.currentTime + 0.6);
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.6);
+  } catch (_) {}
+}
 
 function initMap() {
   map = [];
@@ -185,6 +234,7 @@ function movePacman(deltaSeconds) {
   const col = Math.round(pacman.x);
   const row = Math.round(pacman.y);
   if (map[row] && (map[row][col] === 2 || map[row][col] === 3)) {
+    playPelletSound();
     if (map[row][col] === 2) score += 10;
     if (map[row][col] === 3) score += 50;
     map[row][col] = 0;
@@ -243,6 +293,7 @@ function distance(a, b) {
 function checkCollisions() {
   for (const ghost of ghosts) {
     if (distance(ghost, pacman) < 0.7) {
+      playDeathSound();
       lives--;
       updateUI();
       if (lives <= 0) {
@@ -319,7 +370,9 @@ function drawPacman() {
       ? Math.PI / 2
       : 0;
 
-  const mouthOpen = 0.3;
+  // Animate mouth open/close (chomp) like the original game
+  const chompSpeed = 18;
+  const mouthOpen = 0.08 + 0.28 * (0.5 + 0.5 * Math.sin(gameTime * chompSpeed));
 
   ctx.fillStyle = "#ffd966";
   ctx.beginPath();
@@ -374,6 +427,7 @@ function loop(timestamp) {
   if (!lastTime) lastTime = timestamp;
   const delta = (timestamp - lastTime) / 1000;
   lastTime = timestamp;
+  gameTime = timestamp / 1000;
 
   if (!gameOver) {
     movePacman(delta);
