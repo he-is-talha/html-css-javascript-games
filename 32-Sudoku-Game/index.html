@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Talha - Sudoku Game</title>
+
+    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
+    <!-- Also uploaded the demo of this code in a gif : https://c.tenor.com/x8v1oNUOmg4AAAAd/tenor.gif-->
+    <!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
+
+    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
+    <!-- More html-css-js Games Calculators Games Cards Elements Projects on https://www.github.com/he-is-talha -->
+    <!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
+
+    <link rel="icon" href="https://i.ibb.co/M6KTWnf/pic.jpg" />
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Level selection screen -->
+      <div id="levelScreen" class="level-screen">
+        <h1>Sudoku</h1>
+        <p>Choose difficulty</p>
+        <div class="level-buttons">
+          <button type="button" data-level="easy" class="level-btn">Easy</button>
+          <button type="button" data-level="medium" class="level-btn">Medium</button>
+          <button type="button" data-level="hard" class="level-btn">Hard</button>
+        </div>
+      </div>
+
+      <!-- Game screen -->
+      <div id="gameScreen" class="game-screen hidden">
+        <header class="header">
+          <h1>Sudoku</h1>
+          <div class="toolbar">
+            <span class="timer" id="timer">0:00</span>
+            <span class="level-badge" id="levelBadge">Easy</span>
+            <button type="button" id="newGameBtn" class="btn">New Game</button>
+            <button type="button" id="changeLevelBtn" class="btn btn-ghost">Change Level</button>
+          </div>
+        </header>
+
+        <main class="game-container">
+          <div class="board-wrapper">
+            <div id="board" class="board"></div>
+          </div>
+          <div class="number-pad" id="numberPad">
+            <button type="button" class="num-btn" data-num="1">1</button>
+            <button type="button" class="num-btn" data-num="2">2</button>
+            <button type="button" class="num-btn" data-num="3">3</button>
+            <button type="button" class="num-btn" data-num="4">4</button>
+            <button type="button" class="num-btn" data-num="5">5</button>
+            <button type="button" class="num-btn" data-num="6">6</button>
+            <button type="button" class="num-btn" data-num="7">7</button>
+            <button type="button" class="num-btn" data-num="8">8</button>
+            <button type="button" class="num-btn" data-num="9">9</button>
+            <button type="button" class="num-btn num-btn-clear" data-num="0">Clear</button>
+          </div>
+        </main>
+
+        <div id="winOverlay" class="win-overlay hidden">
+          <div class="win-box">
+            <h2>You solved it!</h2>
+            <p class="win-time" id="winTime">Time: 0:00</p>
+            <button type="button" id="playAgainBtn" class="btn btn-large">Play Again</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
