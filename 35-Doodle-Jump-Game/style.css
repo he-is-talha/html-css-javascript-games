@@ -1,0 +1,200 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  font-family: "Nunito", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.game-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: min(480px, 95vw);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(255, 255, 255, 0.06);
+}
+
+#gameCanvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 480 / 600;
+  max-height: 70vh;
+  height: auto;
+  background: linear-gradient(180deg, #87ceeb 0%, #e0f6ff 40%, #98d8aa 70%, #7bc67e 100%);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.game-ui {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), transparent);
+}
+
+.score-label,
+.high-score-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.85);
+  margin-right: 4px;
+}
+
+.score-value,
+.high-score-value {
+  font-family: "Fredoka One", cursive;
+  font-size: 22px;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.high-score-value {
+  color: #ffd93d;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  padding: 24px;
+  text-align: center;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-start h1 {
+  font-family: "Fredoka One", cursive;
+  font-size: 2.5rem;
+  color: #fff;
+  margin: 0 0 16px;
+  text-shadow: 0 4px 0 #6bcb77, 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.overlay-start p {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 8px 0;
+  font-size: 1rem;
+}
+
+.overlay-start kbd {
+  display: inline-block;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.9em;
+}
+
+.btn-start {
+  margin-top: 24px;
+  padding: 14px 40px;
+  font-family: "Fredoka One", cursive;
+  font-size: 1.25rem;
+  color: #1a1a2e;
+  background: linear-gradient(180deg, #6bcb77 0%, #4ade80 100%);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #2d8a3e, 0 8px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #2d8a3e, 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.btn-start:active {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 #2d8a3e, 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.overlay-gameover h2 {
+  font-family: "Fredoka One", cursive;
+  font-size: 2rem;
+  color: #ff6b6b;
+  margin: 0 0 8px;
+}
+
+.overlay-gameover p {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.1rem;
+  margin: 8px 0;
+}
+
+.overlay-gameover #finalScoreEl {
+  font-family: "Fredoka One", cursive;
+  color: #ffd93d;
+}
+
+/* Mobile control buttons */
+.mobile-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+.mobile-controls .ctrl-btn {
+  pointer-events: auto;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s, background 0.1s;
+}
+
+.mobile-controls .ctrl-btn:active,
+.mobile-controls .ctrl-btn.active {
+  background: rgba(107, 203, 119, 0.8);
+  transform: scale(0.95);
+}
+
+@media (hover: hover) {
+  .mobile-controls .ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+  }
+}
+
+.overlay-start .mobile-hint {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.75);
+}
