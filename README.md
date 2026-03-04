@@ -36,6 +36,8 @@ This repository contains a collection of HTML, CSS, and JavaScript games. 🎯�
 | 30  | [Simon Says Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/30-Simon-Says-Game)                       | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/30-Simon-Says-Game/)            |
 | 31  | [Pac-Man Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/31-Pac-Man-Game)                             | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/31-Pac-Man-Game/)               |
 | 32  | [Sudoku Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/32-Sudoku-Game)                               | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/32-Sudoku-Game/)                |
+| 33  | [Chess Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/33-Chess-Game)                                 | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/33-Chess-Game/)                  |
+| 34  | [Wordle Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/34-Wordle-Game)                              | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/34-Wordle-Game/)                 |
 
 ## Games Description
 
@@ -71,6 +73,8 @@ This repository contains a collection of HTML, CSS, and JavaScript games. 🎯�
 30. **Simon Says Game**: Follow the color sequence and repeat it correctly to advance through levels. Test your memory and speed in this classic memory game! 🎮💡
 31. **Pac-Man Game**: Navigate Pac-Man through a neon maze, eat all pellets, and avoid ghosts in this arcade-inspired classic remake. 👻
 32. **Sudoku Game**: Fill the 9×9 grid so each row, column, and 3×3 box contains 1–9. Three difficulty levels: Easy, Medium, and Hard. 🧩
+33. **Chess Game**: Play the classic game of chess with standard rules on an 8×8 board. ♟️
+34. **Wordle Game**: Guess the hidden word in limited tries. Green = correct letter & position, yellow = letter in word, gray = not in word. Four levels: Easy (4 letters), Medium (5), Hard (6), Expert (7). 📝
 
 ## License
 
