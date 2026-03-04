@@ -578,6 +578,12 @@
     gameOverOverlay.classList.add("hidden");
   });
 
+  document.getElementById("changeModeBtn").addEventListener("click", () => {
+    modeScreen.classList.remove("hidden");
+    gameScreen.classList.add("hidden");
+    gameOverOverlay.classList.add("hidden");
+  });
+
   document.getElementById("playAgainBtn").addEventListener("click", () => {
     modeScreen.classList.remove("hidden");
     gameScreen.classList.add("hidden");

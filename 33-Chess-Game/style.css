@@ -151,6 +151,16 @@ body {
   background: var(--accent-hover);
 }
 
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
 .btn-large {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
@@ -297,12 +307,105 @@ body {
 
 /* ----- Responsive ----- */
 @media (max-width: 520px) {
+  .wrapper {
+    padding: 0.75rem;
+  }
+
   .board {
     width: min(95vw, 360px);
     height: min(95vw, 360px);
+    min-width: 280px;
+    min-height: 280px;
   }
 
   .square {
     font-size: clamp(1.25rem, 4.5vw, 2rem);
+  }
+
+  .game-screen .header h1 {
+    font-size: 1.25rem;
+  }
+
+  .turn-label {
+    font-size: 0.9rem;
+  }
+
+  .btn,
+  .btn-ghost {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .game-over-box {
+    padding: 1.5rem;
+    margin: 0.5rem;
+  }
+
+  .game-over-box h2 {
+    font-size: 1.25rem;
+  }
+
+  .promotion-piece-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.75rem;
+  }
+}
+
+/* Very small phones & safe areas */
+@media (max-width: 380px) {
+  .wrapper {
+    padding: 0.5rem;
+    padding-left: max(0.5rem, env(safe-area-inset-left));
+    padding-right: max(0.5rem, env(safe-area-inset-right));
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+
+  .mode-screen {
+    padding: 1.25rem 0.5rem;
+  }
+
+  .mode-screen h1 {
+    font-size: 1.75rem;
+  }
+
+  .mode-screen p {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mode-btn {
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+  }
+
+  .game-info {
+    gap: 0.5rem;
+  }
+
+  .mode-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .board {
+    width: min(100vw - 1rem, 320px);
+    height: min(100vw - 1rem, 320px);
+    min-width: 256px;
+    min-height: 256px;
+  }
+
+  .square {
+    font-size: clamp(1rem, 3.5vw, 1.5rem);
+  }
+}
+
+/* Safe area for notched devices (all viewports) */
+@supports (padding: env(safe-area-inset-top)) {
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
 }
