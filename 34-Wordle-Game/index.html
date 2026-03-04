@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Talha - Wordle Game</title>
+
+    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
+    <!-- Also uploaded the demo of this code in a gif : https://c.tenor.com/x8v1oNUOmg4AAAAd/tenor.gif-->
+    <!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
+
+    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
+    <!-- More html-css-js Games Calculators Games Cards Elements Projects on https://www.github.com/he-is-talha -->
+    <!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
+
+    <link rel="icon" href="https://i.ibb.co/M6KTWnf/pic.jpg" />
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Level selection -->
+      <div id="levelScreen" class="level-screen">
+        <div class="level-title-row">
+          <h1>Wordle</h1>
+          <button type="button" id="howToPlayBtnLevel" class="how-to-play-btn" title="How to play" aria-label="How to play">
+            <span aria-hidden="true">?</span>
+          </button>
+        </div>
+        <p>Choose a level</p>
+        <div class="level-buttons">
+          <button type="button" data-level="easy" class="level-btn">
+            <span class="level-name">Easy</span>
+            <span class="level-desc">4 letters · 6 guesses</span>
+          </button>
+          <button type="button" data-level="medium" class="level-btn">
+            <span class="level-name">Medium</span>
+            <span class="level-desc">5 letters · 6 guesses</span>
+          </button>
+          <button type="button" data-level="hard" class="level-btn">
+            <span class="level-name">Hard</span>
+            <span class="level-desc">6 letters · 5 guesses</span>
+          </button>
+          <button type="button" data-level="expert" class="level-btn">
+            <span class="level-name">Expert</span>
+            <span class="level-desc">7 letters · 5 guesses</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Game screen -->
+      <div id="gameScreen" class="game-screen hidden">
+        <header class="header">
+          <h1>Wordle</h1>
+          <span class="level-badge" id="levelBadge">Easy</span>
+          <div class="header-actions">
+            <button type="button" id="howToPlayBtnGame" class="how-to-play-btn" title="How to play" aria-label="How to play">
+              <span aria-hidden="true">?</span>
+            </button>
+            <label class="hint-toggle">
+              <input type="checkbox" id="showHintsToggle" />
+              <span class="hint-toggle-label">Show hints</span>
+            </label>
+            <button type="button" id="changeLevelBtn" class="btn btn-ghost">Change Level</button>
+            <button type="button" id="newGameBtn" class="btn">New Game</button>
+          </div>
+        </header>
+
+        <main class="game-container">
+          <p id="hintArea" class="hint-area hidden" aria-live="polite"></p>
+          <div id="board" class="board"></div>
+          <div id="keyboard" class="keyboard"></div>
+        </main>
+
+        <!-- Result overlay -->
+        <div id="resultOverlay" class="result-overlay hidden">
+          <div class="result-box">
+            <h2 id="resultTitle"></h2>
+            <p class="result-word" id="resultWord"></p>
+            <div class="result-actions">
+              <button type="button" id="playAgainBtn" class="btn btn-large">Play Again</button>
+              <button type="button" id="changeLevelFromResultBtn" class="btn btn-ghost">Change Level</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to play modal -->
+    <div id="howToPlayOverlay" class="how-to-play-overlay hidden" aria-hidden="true">
+      <div class="how-to-play-modal" role="dialog" aria-labelledby="howToPlayTitle" aria-modal="true">
+        <div class="how-to-play-header">
+          <h2 id="howToPlayTitle">How to play</h2>
+          <button type="button" id="howToPlayClose" class="how-to-play-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="how-to-play-body">
+          <p>Guess the <strong>hidden word</strong> in a limited number of tries.</p>
+          <p>Each guess must be a valid word. Type with the keyboard or tap the on-screen keys, then press <strong>Enter</strong>.</p>
+          <p>After each guess, the tiles show:</p>
+          <ul>
+            <li><span class="tile-demo tile-demo-correct">W</span> <strong>Green</strong> — letter is in the word and in the correct spot.</li>
+            <li><span class="tile-demo tile-demo-present">E</span> <strong>Yellow</strong> — letter is in the word but in the wrong spot.</li>
+            <li><span class="tile-demo tile-demo-absent">A</span> <strong>Gray</strong> — letter is not in the word.</li>
+          </ul>
+          <p>Choose a <strong>level</strong>: Easy (4 letters), Medium (5), Hard (6), or Expert (7). Turn on <strong>Show hints</strong> for a small clue about the word.</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
