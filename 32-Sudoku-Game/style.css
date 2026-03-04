@@ -1,0 +1,332 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Outfit", sans-serif;
+  background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: #e8e8e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 520px;
+}
+
+/* ---------- Level selection ---------- */
+.level-screen {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.level-screen h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, #e94560, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.level-screen p {
+  margin: 0 0 2rem;
+  color: #a0a0b0;
+  font-size: 1rem;
+}
+
+.level-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 220px;
+  margin: 0 auto;
+}
+
+.level-btn {
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.9rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  color: #1a1a2e;
+}
+
+.level-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.level-btn[data-level="easy"] {
+  background: linear-gradient(135deg, #6bcb77, #4ade80);
+}
+
+.level-btn[data-level="medium"] {
+  background: linear-gradient(135deg, #ffd93d, #fbbf24);
+}
+
+.level-btn[data-level="hard"] {
+  background: linear-gradient(135deg, #e94560, #ef4444);
+  color: #fff;
+}
+
+/* ---------- Game screen ---------- */
+.game-screen.hidden,
+.win-overlay.hidden,
+.level-screen.hidden {
+  display: none !important;
+}
+
+.game-screen {
+  padding: 0.5rem 0 2rem;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(135deg, #e94560, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.timer {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #a0a0b0;
+  min-width: 3.5rem;
+}
+
+.level-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #c0c0d0;
+}
+
+.btn {
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #e94560;
+  color: #fff;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn:hover {
+  background: #ff6b6b;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #a0a0b0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e8e8e8;
+}
+
+.btn-large {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* ---------- Board ---------- */
+.game-container {
+  position: relative;
+}
+
+.board-wrapper {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.board {
+  display: grid;
+  aspect-ratio: 1;
+  max-width: 100%;
+  margin: 0 auto;
+  border: 2px solid #e94560;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0d0d1a;
+}
+
+.board-4 { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); }
+.board-6 { grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr); }
+.board-9 { grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(9, 1fr); }
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(0.85rem, 4vw, 1.25rem);
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: background 0.15s;
+  min-height: 0;
+}
+
+.cell.given {
+  background: rgba(233, 69, 96, 0.12);
+  color: #ff8a9e;
+  cursor: default;
+}
+
+.cell.user {
+  color: #e8e8e8;
+}
+
+.cell.selected {
+  background: rgba(233, 69, 96, 0.35);
+  outline: 2px solid #e94560;
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.cell.same-number {
+  background: rgba(233, 69, 96, 0.2);
+}
+
+.cell.error {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* Box borders (set by JS: .cell-edge-r, .cell-edge-b) */
+.cell.cell-edge-r {
+  border-right-width: 2px;
+  border-right-color: rgba(255, 255, 255, 0.2);
+}
+
+.cell.cell-edge-b {
+  border-bottom-width: 2px;
+  border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ---------- Number pad ---------- */
+.number-pad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+}
+
+.num-btn {
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.65rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e8e8e8;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.15s, transform 0.1s;
+}
+
+.num-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.num-btn:active {
+  transform: scale(0.96);
+}
+
+.num-btn-clear {
+  grid-column: span 2;
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.num-btn-clear:hover {
+  background: rgba(239, 68, 68, 0.35);
+}
+
+/* ---------- Win overlay ---------- */
+.win-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.win-box {
+  background: linear-gradient(145deg, #1a1a2e, #16213e);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  max-width: 320px;
+  width: 100%;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+.win-box h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  color: #e8e8e8;
+}
+
+.win-time {
+  margin: 0 0 1.5rem;
+  color: #a0a0b0;
+  font-size: 1rem;
+}
+
+@media (min-width: 420px) {
+  .board .cell {
+    font-size: 1.15rem;
+  }
+}

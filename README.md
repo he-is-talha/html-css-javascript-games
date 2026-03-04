@@ -35,6 +35,7 @@ This repository contains a collection of HTML, CSS, and JavaScript games. 🎯�
 | 29  | [Whack A Mole Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/29-Whack-A-Mole-Game)                   | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/29-Whack-A-Mole-Game/)          |
 | 30  | [Simon Says Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/30-Simon-Says-Game)                       | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/30-Simon-Says-Game/)            |
 | 31  | [Pac-Man Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/31-Pac-Man-Game)                             | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/31-Pac-Man-Game/)               |
+| 32  | [Sudoku Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/32-Sudoku-Game)                               | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/32-Sudoku-Game/)                |
 
 ## Games Description
 
@@ -69,6 +70,7 @@ This repository contains a collection of HTML, CSS, and JavaScript games. 🎯�
 29. **Whack-a-Mole Game**: Test your reaction speed by hitting randomly appearing moles with a mallet before they disappear in this classic arcade game. 🕹️
 30. **Simon Says Game**: Follow the color sequence and repeat it correctly to advance through levels. Test your memory and speed in this classic memory game! 🎮💡
 31. **Pac-Man Game**: Navigate Pac-Man through a neon maze, eat all pellets, and avoid ghosts in this arcade-inspired classic remake. 👻
+32. **Sudoku Game**: Fill the 9×9 grid so each row, column, and 3×3 box contains 1–9. Three difficulty levels: Easy, Medium, and Hard. 🧩
 
 ## License
 
