@@ -242,6 +242,20 @@
     state.cells[flatIndex(r, c)].classList.add("selected");
   }
 
+  function findNextSelectableCell(r, c, direction) {
+    const size = state.size;
+    if (direction === "up") {
+      for (let nr = r - 1; nr >= 0; nr--) if (!state.given[nr][c]) return { r: nr, c };
+    } else if (direction === "down") {
+      for (let nr = r + 1; nr < size; nr++) if (!state.given[nr][c]) return { r: nr, c };
+    } else if (direction === "left") {
+      for (let nc = c - 1; nc >= 0; nc--) if (!state.given[r][nc]) return { r, c: nc };
+    } else if (direction === "right") {
+      for (let nc = c + 1; nc < size; nc++) if (!state.given[r][nc]) return { r, c: nc };
+    }
+    return null;
+  }
+
   function setCellValue(r, c, num) {
     if (state.given[r][c]) return;
     const maxNum = state.size;
@@ -333,7 +347,6 @@
     if (!state.selectedCell) return;
     const r = state.selectedCell.r, c = state.selectedCell.c;
     const maxNum = state.size;
-    const maxIdx = state.size - 1;
     if (e.key >= "1" && e.key <= "9") {
       const n = parseInt(e.key, 10);
       if (n <= maxNum) setCellValue(r, c, n);
@@ -341,17 +354,21 @@
     } else if (e.key === "Backspace" || e.key === "Delete") {
       setCellValue(r, c, 0);
       e.preventDefault();
-    } else if (e.key === "ArrowUp" && r > 0) {
-      selectCell(r - 1, c);
+    } else if (e.key === "ArrowUp") {
+      const next = findNextSelectableCell(r, c, "up");
+      if (next) selectCell(next.r, next.c);
       e.preventDefault();
-    } else if (e.key === "ArrowDown" && r < maxIdx) {
-      selectCell(r + 1, c);
+    } else if (e.key === "ArrowDown") {
+      const next = findNextSelectableCell(r, c, "down");
+      if (next) selectCell(next.r, next.c);
       e.preventDefault();
-    } else if (e.key === "ArrowLeft" && c > 0) {
-      selectCell(r, c - 1);
+    } else if (e.key === "ArrowLeft") {
+      const next = findNextSelectableCell(r, c, "left");
+      if (next) selectCell(next.r, next.c);
       e.preventDefault();
-    } else if (e.key === "ArrowRight" && c < maxIdx) {
-      selectCell(r, c + 1);
+    } else if (e.key === "ArrowRight") {
+      const next = findNextSelectableCell(r, c, "right");
+      if (next) selectCell(next.r, next.c);
       e.preventDefault();
     }
   });
