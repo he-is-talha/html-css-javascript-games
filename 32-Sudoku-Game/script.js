@@ -1,24 +1,29 @@
 (function () {
   "use strict";
 
-  // Clues to leave per level (more clues = easier)
-  const LEVEL_CLUES = {
-    easy: { min: 42, max: 45 },
-    medium: { min: 32, max: 36 },
-    hard: { min: 25, max: 28 },
+  // Level: grid size, box dimensions, and clue count range
+  // Easy: no box/region check (row + column only); Medium/Hard: full Sudoku with boxes
+  const LEVEL_CONFIG = {
+    easy:   { size: 4, boxRows: 2, boxCols: 2, cluesMin: 8,  cluesMax: 10, checkBox: false },
+    medium: { size: 6, boxRows: 2, boxCols: 3, cluesMin: 18, cluesMax: 22, checkBox: true },
+    hard:   { size: 9, boxRows: 3, boxCols: 3, cluesMin: 25, cluesMax: 28, checkBox: true },
   };
 
-  const LEVEL_LABELS = { easy: "Easy", medium: "Medium", hard: "Hard" };
+  const LEVEL_LABELS = { easy: "Easy (4×4)", medium: "Medium (6×6)", hard: "Hard (9×9)" };
 
   let state = {
     level: "easy",
-    solution: null,   // 9x9 full grid
-    puzzle: null,     // 9x9 with null for empty cells
-    given: null,      // 9x9 boolean: true if cell was given
+    size: 4,
+    boxRows: 2,
+    boxCols: 2,
+    checkBox: false,  // easy: row+column only; medium/hard: also box
+    solution: null,
+    puzzle: null,
+    given: null,
     selectedCell: null,
     startTime: null,
     timerId: null,
-    cells: [],        // flat array of DOM elements
+    cells: [],
   };
 
   const levelScreen = document.getElementById("levelScreen");
@@ -28,31 +33,35 @@
   const levelBadge = document.getElementById("levelBadge");
   const winOverlay = document.getElementById("winOverlay");
   const winTimeEl = document.getElementById("winTime");
+  const numberPadEl = document.getElementById("numberPad");
 
-  function createEmptyGrid() {
-    return Array.from({ length: 9 }, () => Array(9).fill(0));
+  function createEmptyGrid(size) {
+    return Array.from({ length: size }, () => Array(size).fill(0));
   }
 
-  function isValid(grid, row, col, num) {
-    for (let c = 0; c < 9; c++) if (grid[row][c] === num) return false;
-    for (let r = 0; r < 9; r++) if (grid[r][col] === num) return false;
-    const br = Math.floor(row / 3) * 3;
-    const bc = Math.floor(col / 3) * 3;
-    for (let r = br; r < br + 3; r++)
-      for (let c = bc; c < bc + 3; c++)
-        if (grid[r][c] === num) return false;
+  function isValid(grid, row, col, num, size, boxRows, boxCols, checkBox) {
+    for (let c = 0; c < size; c++) if (grid[row][c] === num) return false;
+    for (let r = 0; r < size; r++) if (grid[r][col] === num) return false;
+    if (checkBox && boxRows > 0 && boxCols > 0) {
+      const br = Math.floor(row / boxRows) * boxRows;
+      const bc = Math.floor(col / boxCols) * boxCols;
+      for (let r = br; r < br + boxRows; r++)
+        for (let c = bc; c < bc + boxCols; c++)
+          if (grid[r][c] === num) return false;
+    }
     return true;
   }
 
-  function solve(grid) {
-    for (let r = 0; r < 9; r++) {
-      for (let c = 0; c < 9; c++) {
+  function solve(grid, size, boxRows, boxCols, checkBox) {
+    const maxNum = size;
+    const nums = Array.from({ length: maxNum }, (_, i) => i + 1).sort(() => Math.random() - 0.5);
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
         if (grid[r][c] !== 0) continue;
-        const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
         for (const num of nums) {
-          if (!isValid(grid, r, c, num)) continue;
+          if (!isValid(grid, r, c, num, size, boxRows, boxCols, checkBox)) continue;
           grid[r][c] = num;
-          if (solve(grid)) return true;
+          if (solve(grid, size, boxRows, boxCols, checkBox)) return true;
           grid[r][c] = 0;
         }
         return false;
@@ -61,16 +70,16 @@
     return true;
   }
 
-  function generateFullGrid() {
-    const grid = createEmptyGrid();
-    solve(grid);
+  function generateFullGrid(size, boxRows, boxCols, checkBox) {
+    const grid = createEmptyGrid(size);
+    solve(grid, size, boxRows, boxCols, checkBox);
     return grid;
   }
 
-  function getShuffledIndices() {
+  function getShuffledIndices(size) {
     const indices = [];
-    for (let r = 0; r < 9; r++)
-      for (let c = 0; c < 9; c++) indices.push({ r, c });
+    for (let r = 0; r < size; r++)
+      for (let c = 0; c < size; c++) indices.push({ r, c });
     for (let i = indices.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [indices[i], indices[j]] = [indices[j], indices[i]];
@@ -79,32 +88,33 @@
   }
 
   function createPuzzle(level) {
-    const solution = generateFullGrid();
-    const { min, max } = LEVEL_CLUES[level];
-    const cluesCount = min + Math.floor(Math.random() * (max - min + 1));
-    const toRemove = 81 - cluesCount;
+    const { size, boxRows, boxCols, cluesMin, cluesMax, checkBox } = LEVEL_CONFIG[level];
+    const solution = generateFullGrid(size, boxRows, boxCols, checkBox);
+    const cluesCount = cluesMin + Math.floor(Math.random() * (cluesMax - cluesMin + 1));
+    const total = size * size;
+    const toRemove = total - cluesCount;
     const puzzle = solution.map((row) => row.slice());
     const given = puzzle.map((row) => row.map(() => false));
-    const indices = getShuffledIndices();
+    const indices = getShuffledIndices(size);
     for (let k = 0; k < toRemove; k++) {
       const { r, c } = indices[k];
       puzzle[r][c] = null;
       given[r][c] = false;
     }
-    for (let r = 0; r < 9; r++)
-      for (let c = 0; c < 9; c++)
+    for (let r = 0; r < size; r++)
+      for (let c = 0; c < size; c++)
         if (puzzle[r][c] !== null) given[r][c] = true;
     return { solution, puzzle, given };
   }
 
   function flatIndex(r, c) {
-    return r * 9 + c;
+    return r * state.size + c;
   }
 
   function updateCellUI(index, value, isError, isSameNumber) {
     const cell = state.cells[index];
     if (!cell) return;
-    const r = Math.floor(index / 9), c = index % 9;
+    const r = Math.floor(index / state.size), c = index % state.size;
     const isGiven = state.given[r][c];
     cell.textContent = value !== null && value !== "" ? value : "";
     cell.classList.remove("user", "given", "error", "same-number");
@@ -116,8 +126,9 @@
 
   function getCurrentGrid() {
     const grid = state.puzzle.map((row) => row.slice());
-    for (let i = 0; i < 81; i++) {
-      const r = Math.floor(i / 9), c = i % 9;
+    const total = state.size * state.size;
+    for (let i = 0; i < total; i++) {
+      const r = Math.floor(i / state.size), c = i % state.size;
       if (state.given[r][c]) continue;
       const val = state.cells[i] && state.cells[i].textContent.trim();
       grid[r][c] = val === "" ? null : parseInt(val, 10);
@@ -127,19 +138,23 @@
 
   function getConflicts(grid, row, col) {
     const num = grid[row][col];
-    if (num == null || isNaN(num) || num < 1 || num > 9) return { error: false, same: [] };
+    const maxNum = state.size;
+    if (num == null || isNaN(num) || num < 1 || num > maxNum) return { error: false, same: [] };
     const same = [];
-    for (let c = 0; c < 9; c++) {
+    for (let c = 0; c < state.size; c++) {
       if (c !== col && grid[row][c] === num) same.push(flatIndex(row, c));
     }
-    for (let r = 0; r < 9; r++) {
+    for (let r = 0; r < state.size; r++) {
       if (r !== row && grid[r][col] === num) same.push(flatIndex(r, col));
     }
-    const br = Math.floor(row / 3) * 3, bc = Math.floor(col / 3) * 3;
-    for (let r = br; r < br + 3; r++) {
-      for (let c = bc; c < bc + 3; c++) {
-        if ((r !== row || c !== col) && grid[r][c] === num)
-          same.push(flatIndex(r, c));
+    if (state.checkBox && state.boxRows > 0 && state.boxCols > 0) {
+      const br = Math.floor(row / state.boxRows) * state.boxRows;
+      const bc = Math.floor(col / state.boxCols) * state.boxCols;
+      for (let r = br; r < br + state.boxRows; r++) {
+        for (let c = bc; c < bc + state.boxCols; c++) {
+          if ((r !== row || c !== col) && grid[r][c] === num)
+            same.push(flatIndex(r, c));
+        }
       }
     }
     return { error: same.length > 0, same };
@@ -147,8 +162,9 @@
 
   function refreshBoardHighlights() {
     const grid = getCurrentGrid();
-    for (let i = 0; i < 81; i++) {
-      const r = Math.floor(i / 9), c = i % 9;
+    const total = state.size * state.size;
+    for (let i = 0; i < total; i++) {
+      const r = Math.floor(i / state.size), c = i % state.size;
       const { error, same } = getConflicts(grid, r, c);
       const val = grid[r][c];
       updateCellUI(i, val !== null ? String(val) : "", error, same.length > 0);
@@ -157,8 +173,8 @@
 
   function isComplete() {
     const grid = getCurrentGrid();
-    for (let r = 0; r < 9; r++) {
-      for (let c = 0; c < 9; c++) {
+    for (let r = 0; r < state.size; r++) {
+      for (let c = 0; c < state.size; c++) {
         if (grid[r][c] == null) return false;
         const { error } = getConflicts(grid, r, c);
         if (error) return false;
@@ -175,12 +191,20 @@
   }
 
   function buildBoard() {
+    const { size, boxRows, boxCols } = state;
     boardEl.innerHTML = "";
+    boardEl.className = "board board-" + size;
+    boardEl.style.gridTemplateColumns = "repeat(" + size + ", 1fr)";
+    boardEl.style.gridTemplateRows = "repeat(" + size + ", 1fr)";
     state.cells = [];
-    for (let r = 0; r < 9; r++) {
-      for (let c = 0; c < 9; c++) {
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
         const cell = document.createElement("div");
         cell.className = "cell";
+        const edgeRight = (c + 1) % boxCols === 0;
+        const edgeBottom = (r + 1) % boxRows === 0;
+        if (edgeRight) cell.classList.add("cell-edge-r");
+        if (edgeBottom) cell.classList.add("cell-edge-b");
         cell.dataset.r = r;
         cell.dataset.c = c;
         const val = state.puzzle[r][c];
@@ -197,6 +221,20 @@
     }
   }
 
+  function updateNumberPad() {
+    const size = state.size;
+    const buttons = numberPadEl.querySelectorAll(".num-btn[data-num]");
+    buttons.forEach((btn) => {
+      const num = parseInt(btn.dataset.num, 10);
+      if (num === 0) {
+        btn.style.display = ""; // Clear always visible
+        return;
+      }
+      btn.style.display = num <= size ? "" : "none";
+    });
+    numberPadEl.style.gridTemplateColumns = size <= 4 ? "repeat(3, 1fr)" : "repeat(5, 1fr)";
+  }
+
   function selectCell(r, c) {
     if (state.given[r][c]) return;
     state.cells.forEach((cell) => cell.classList.remove("selected"));
@@ -206,6 +244,8 @@
 
   function setCellValue(r, c, num) {
     if (state.given[r][c]) return;
+    const maxNum = state.size;
+    if (num !== 0 && (num < 1 || num > maxNum)) return;
     const i = flatIndex(r, c);
     state.cells[i].textContent = num === 0 ? "" : num;
     refreshBoardHighlights();
@@ -229,6 +269,11 @@
 
   function startGame(level) {
     state.level = level;
+    const config = LEVEL_CONFIG[level];
+    state.size = config.size;
+    state.boxRows = config.boxRows;
+    state.boxCols = config.boxCols;
+    state.checkBox = config.checkBox;
     const { solution, puzzle, given } = createPuzzle(level);
     state.solution = solution;
     state.puzzle = puzzle;
@@ -239,6 +284,7 @@
     levelBadge.textContent = LEVEL_LABELS[level];
     winOverlay.classList.add("hidden");
     buildBoard();
+    updateNumberPad();
     refreshBoardHighlights();
     startTimer();
   }
@@ -276,7 +322,7 @@
     startGame(state.level);
   });
 
-  document.getElementById("numberPad").addEventListener("click", (e) => {
+  numberPadEl.addEventListener("click", (e) => {
     const btn = e.target.closest(".num-btn");
     if (!btn || !state.selectedCell) return;
     const num = parseInt(btn.dataset.num, 10);
@@ -286,8 +332,11 @@
   document.addEventListener("keydown", (e) => {
     if (!state.selectedCell) return;
     const r = state.selectedCell.r, c = state.selectedCell.c;
+    const maxNum = state.size;
+    const maxIdx = state.size - 1;
     if (e.key >= "1" && e.key <= "9") {
-      setCellValue(r, c, parseInt(e.key, 10));
+      const n = parseInt(e.key, 10);
+      if (n <= maxNum) setCellValue(r, c, n);
       e.preventDefault();
     } else if (e.key === "Backspace" || e.key === "Delete") {
       setCellValue(r, c, 0);
@@ -295,13 +344,13 @@
     } else if (e.key === "ArrowUp" && r > 0) {
       selectCell(r - 1, c);
       e.preventDefault();
-    } else if (e.key === "ArrowDown" && r < 8) {
+    } else if (e.key === "ArrowDown" && r < maxIdx) {
       selectCell(r + 1, c);
       e.preventDefault();
     } else if (e.key === "ArrowLeft" && c > 0) {
       selectCell(r, c - 1);
       e.preventDefault();
-    } else if (e.key === "ArrowRight" && c < 8) {
+    } else if (e.key === "ArrowRight" && c < maxIdx) {
       selectCell(r, c + 1);
       e.preventDefault();
     }

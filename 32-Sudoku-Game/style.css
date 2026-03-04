@@ -188,8 +188,6 @@ body {
 
 .board {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  grid-template-rows: repeat(9, 1fr);
   aspect-ratio: 1;
   max-width: 100%;
   margin: 0 auto;
@@ -198,6 +196,10 @@ body {
   overflow: hidden;
   background: #0d0d1a;
 }
+
+.board-4 { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); }
+.board-6 { grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr); }
+.board-9 { grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(9, 1fr); }
 
 .cell {
   display: flex;
@@ -237,25 +239,13 @@ body {
   background: rgba(239, 68, 68, 0.15);
 }
 
-/* 3x3 box borders */
-.cell:nth-child(3n) {
+/* Box borders (set by JS: .cell-edge-r, .cell-edge-b) */
+.cell.cell-edge-r {
   border-right-width: 2px;
   border-right-color: rgba(255, 255, 255, 0.2);
 }
 
-.cell:nth-child(n + 19):nth-child(-n + 27),
-.cell:nth-child(n + 46):nth-child(-n + 54) {
-  border-bottom-width: 2px;
-  border-bottom-color: rgba(255, 255, 255, 0.2);
-}
-
-.cell:nth-child(9n) {
-  border-right-width: 2px;
-  border-right-color: rgba(255, 255, 255, 0.2);
-}
-
-.cell:nth-child(n + 28):nth-child(-n + 36),
-.cell:nth-child(n + 55):nth-child(-n + 63) {
+.cell.cell-edge-b {
   border-bottom-width: 2px;
   border-bottom-color: rgba(255, 255, 255, 0.2);
 }
