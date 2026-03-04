@@ -39,6 +39,7 @@ This repository contains a collection of HTML, CSS, and JavaScript games. 🎯�
 | 33  | [Chess Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/33-Chess-Game)                                 | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/33-Chess-Game/)                  |
 | 34  | [Wordle Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/34-Wordle-Game)                              | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/34-Wordle-Game/)                 |
 | 35  | [Doodle Jump Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/35-Doodle-Jump-Game)                    | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/35-Doodle-Jump-Game/)            |
+| 36  | [Solitaire Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/36-Solitaire-Game)                      | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/36-Solitaire-Game/)               |
 
 ## Games Description
 
@@ -77,6 +78,7 @@ This repository contains a collection of HTML, CSS, and JavaScript games. 🎯�
 33. **Chess Game**: Play the classic game of chess with standard rules on an 8×8 board. ♟️
 34. **Wordle Game**: Guess the hidden word in limited tries. Green = correct letter & position, yellow = letter in word, gray = not in word. Four levels: Easy (4 letters), Medium (5), Hard (6), Expert (7). 📝
 35. **Doodle Jump Game**: Bounce on platforms and climb as high as you can! Use arrow keys or A/D to move. Green platforms are safe, brown break after one bounce, blue platforms move. 🦘
+36. **Solitaire Game**: Classic Klondike solitaire. Build foundations A→K by suit and tableau in alternating colors. Three difficulties: Easy (draw 1, unlimited undo, hints), Medium (draw 1, 5 undos, hints), Hard (draw 3, no undo, no hints). Mobile-friendly. 🃏
 
 ## License
 
