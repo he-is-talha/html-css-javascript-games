@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Talha - Chess Game</title>
+
+    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
+    <!-- Also uploaded the demo of this code in a gif : https://c.tenor.com/x8v1oNUOmg4AAAAd/tenor.gif-->
+    <!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
+
+    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
+    <!-- More html-css-js Games Calculators Games Cards Elements Projects on https://www.github.com/he-is-talha -->
+    <!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
+
+    <link rel="icon" href="https://i.ibb.co/M6KTWnf/pic.jpg" />
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Mode selection screen -->
+      <div id="modeScreen" class="mode-screen">
+        <h1>Chess</h1>
+        <p>Choose game mode</p>
+        <div class="mode-buttons">
+          <button type="button" id="vsFriendBtn" class="mode-btn">
+            <span class="mode-icon">👥</span>
+            Vs Friend
+          </button>
+          <button type="button" id="vsAiBtn" class="mode-btn">
+            <span class="mode-icon">🤖</span>
+            Vs AI
+          </button>
+        </div>
+      </div>
+
+      <!-- Game screen -->
+      <div id="gameScreen" class="game-screen hidden">
+        <header class="header">
+          <h1>Chess</h1>
+          <div class="game-info">
+            <span class="turn-label" id="turnLabel">White to move</span>
+            <span class="mode-badge" id="modeBadge">Vs Friend</span>
+            <button type="button" id="newGameBtn" class="btn">New Game</button>
+            <button type="button" id="changeModeBtn" class="btn btn-ghost">Change Mode</button>
+          </div>
+        </header>
+
+        <main class="game-container">
+          <div id="board" class="board"></div>
+          <div class="promotion-overlay hidden" id="promotionOverlay">
+            <p>Promote pawn to:</p>
+            <div class="promotion-pieces" id="promotionPieces"></div>
+          </div>
+        </main>
+
+        <div id="gameOverOverlay" class="game-over-overlay hidden">
+          <div class="game-over-box">
+            <h2 id="gameOverTitle">Checkmate!</h2>
+            <p id="gameOverMessage"></p>
+            <button type="button" id="playAgainBtn" class="btn btn-large">Play Again</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
