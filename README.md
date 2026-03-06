@@ -40,6 +40,7 @@ This repository contains a collection of HTML, CSS, and JavaScript games. 🎯�
 | 34  | [Emoji Catcher Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/34-Emoji-Catcher-Game)                 | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/34-Emoji-Catcher-Game/)         |
 | 35  | [Whack A Mole Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/35-Whack-A-Mole-Game)                   | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/35-Whack-A-Mole-Game/)          |
 | 36  | [Simon Says Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/36-Simon-Says-Game)                       | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/36-Simon-Says-Game/)            |
+| 37  | [Sliding Puzzle Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/37-Sliding-Puzzle-Game)               | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/37-Sliding-Puzzle-Game/)        |
 
 ## Games Description
 
@@ -79,6 +80,7 @@ This repository contains a collection of HTML, CSS, and JavaScript games. 🎯�
 34. **Emoji Catcher Game**: Catch falling emojis with a basket or container while avoiding bombs and other obstacles in this emoji-catching game. 🎯😄
 35. **Whack-a-Mole Game**: Test your reaction speed by hitting randomly appearing moles with a mallet before they disappear in this classic arcade game. 🕹️
 36. **Simon Says Game**: Follow the color sequence and repeat it correctly to advance through levels. Test your memory and speed in this classic memory game! 🎮💡
+37. **Sliding Puzzle Game**: Slide tiles into the empty space to reassemble the image. Three difficulties: Easy (3×3), Medium (4×4), Hard (5×5). Mobile-friendly. 🧩
 
 ## License
 

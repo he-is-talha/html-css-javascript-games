@@ -1,0 +1,459 @@
+/* ===== Sliding Puzzle - Mobile responsive ===== */
+:root {
+  --tile-gap: 4px;
+  --tile-radius: 6px;
+  --board-bg: #1a1a2e;
+  --tile-bg: #16213e;
+  --tile-border: #0f3460;
+  --tile-text: #e8e8e8;
+  --accent: #e94560;
+  --empty-bg: rgba(15, 52, 96, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Outfit", sans-serif;
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  min-height: 100vh;
+  color: #f5f5f5;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+}
+
+/* ===== Level screen ===== */
+.level-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+}
+
+.level-screen h1 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+.level-screen > p {
+  margin: 0 0 24px;
+  opacity: 0.9;
+  font-size: 1rem;
+}
+
+.level-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.level-btn {
+  padding: 16px 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.1s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.level-btn:hover,
+.level-btn:focus-visible {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.level-btn:active {
+  transform: scale(0.98);
+}
+
+.level-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.level-desc {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+.level-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.level-header h1 {
+  margin: 0;
+}
+
+/* ===== Help button ===== */
+.help-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.help-btn:hover,
+.help-btn:focus-visible {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* ===== Help modal ===== */
+.help-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  padding: 20px;
+}
+
+.help-overlay.hidden {
+  display: none;
+}
+
+.help-modal {
+  background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.help-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.help-header h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.help-close {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.help-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.help-body {
+  padding: 20px;
+}
+
+.help-body p {
+  margin: 0 0 12px;
+}
+
+.help-body ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.help-body li {
+  margin-bottom: 10px;
+  line-height: 1.45;
+}
+
+.help-body li:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== Game screen ===== */
+.game-screen {
+  width: 100%;
+  max-width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-screen.hidden,
+.level-screen.hidden {
+  display: none;
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  width: 100%;
+  max-width: 720px;
+}
+
+.header h1 {
+  font-size: clamp(1.25rem, 4vw, 1.5rem);
+  margin: 0;
+  font-weight: 700;
+}
+
+.level-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.moves {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.25);
+  color: inherit;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-large {
+  padding: 12px 24px;
+  font-size: 1rem;
+}
+
+/* ===== Board ===== */
+.game-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 200px;
+  padding: 8px 0;
+}
+
+.board {
+  display: grid;
+  gap: var(--tile-gap);
+  padding: 10px;
+  background: var(--board-bg);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  width: min(92vw, 720px);
+  height: min(82vh, 720px);
+  max-width: 100%;
+  max-height: min(82vh, 720px);
+  aspect-ratio: 1;
+}
+
+/* Board size is set inline via grid-template-columns/rows and --size */
+.board.size-3 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.board.size-4 {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+}
+
+.board.size-5 {
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tile-bg);
+  background-repeat: no-repeat;
+  border: 2px solid var(--tile-border);
+  border-radius: var(--tile-radius);
+  color: var(--tile-text);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.15s;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tile:hover {
+  background-color: #1f3460;
+  transform: scale(1.02);
+}
+
+.tile.tile-image:hover {
+  background-color: transparent;
+}
+
+.tile:active {
+  transform: scale(0.98);
+}
+
+.tile.empty {
+  background: var(--empty-bg);
+  border-color: transparent;
+  cursor: default;
+  box-shadow: none;
+}
+
+.tile.empty:hover {
+  background: var(--empty-bg);
+  transform: none;
+}
+
+/* Image tiles: no number, image slice only */
+.tile.tile-image .tile-num {
+  display: none;
+}
+
+/* ===== Win overlay ===== */
+.win-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.win-overlay.hidden {
+  display: none;
+}
+
+.win-box {
+  background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  max-width: 360px;
+}
+
+.win-box h2 {
+  margin: 0 0 8px;
+  font-size: 1.75rem;
+  color: var(--accent);
+}
+
+.win-box p {
+  margin: 0 0 24px;
+  opacity: 0.9;
+}
+
+.win-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ===== Mobile: keep board large, use most of viewport ===== */
+@media (max-width: 600px) {
+  .header {
+    max-width: 100%;
+  }
+
+  .header-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-end;
+  }
+
+  .board {
+    width: min(96vw, 420px);
+    height: min(78vh, 96vw, 420px);
+    max-height: min(78vh, 96vw, 420px);
+    padding: 6px;
+  }
+
+  .tile.tile-image .tile-num {
+    display: none;
+  }
+}
