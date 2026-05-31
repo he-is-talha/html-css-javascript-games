@@ -12,33 +12,53 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
-  padding: 20px;
+  padding: 0;
 }
 
 .container {
-  width: 100%;
+  width: 95%;
   max-width: 500px;
-  padding: 30px;
+  max-height: 85dvh; /* Keep within global share.js constraint */
+  padding: 24px;
   background-color: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Container itself doesn't scroll, content does */
 }
 
 h1 {
   text-align: center;
   margin: 0 0 5px 0;
   color: #2d3436;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
 }
 
 h4 {
   text-align: center;
-  margin: 0 0 25px 0;
+  margin: 0 0 15px 0;
   color: #636e72;
   font-weight: 400;
+}
+
+#quiz, #result {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-bottom: 15px;
+}
+
+/* Custom scrollbar for inner content */
+#quiz::-webkit-scrollbar, #result::-webkit-scrollbar, .incorrect-list::-webkit-scrollbar {
+  width: 4px;
+}
+#quiz::-webkit-scrollbar-thumb, #result::-webkit-scrollbar-thumb, .incorrect-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 2px;
 }
 
 .question {
@@ -50,21 +70,22 @@ h4 {
 }
 
 .options {
-  margin-bottom: 25px;
+  margin-bottom: 10px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .option {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  padding: 12px 14px;
   background: #f1f2f6;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   border: 2px solid transparent;
+  min-height: 48px; /* Mobile touch target */
 }
 
 .option:hover {
@@ -73,8 +94,8 @@ h4 {
 
 .option input[type="radio"] {
   margin-right: 12px;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
 }
 
@@ -85,7 +106,7 @@ h4 {
 
 .button {
   display: inline-block;
-  padding: 12px 24px;
+  padding: 14px 24px;
   background-color: #428bca;
   color: #fff;
   border: none;
@@ -95,17 +116,16 @@ h4 {
   border-radius: 12px;
   transition: all 0.2s ease;
   width: 100%;
-  margin-bottom: 10px;
+  flex-shrink: 0;
+  margin-bottom: 8px;
 }
 
 .button:hover {
   background-color: #3071a9;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(66, 139, 202, 0.3);
 }
 
 .button:active {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 .button.hide {
@@ -114,25 +134,25 @@ h4 {
 
 .result {
   text-align: center;
-  margin: 20px 0;
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #2d3436;
 }
 
 .answer-item {
   background: #fff;
-  padding: 15px;
+  padding: 12px;
   border-radius: 12px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   border-left: 4px solid #ff7675;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   text-align: left;
 }
 
 .answer-item p {
-  margin: 5px 0;
-  font-size: 0.95rem;
+  margin: 4px 0;
+  font-size: 0.9rem;
+  word-wrap: break-word;
 }
 
 .wrong {
@@ -146,23 +166,35 @@ h4 {
 }
 
 .incorrect-list {
-  max-height: 40dvh;
-  overflow-y: auto;
-  padding-right: 5px;
+  text-align: left;
 }
 
-/* Custom scrollbar */
-.incorrect-list::-webkit-scrollbar {
-  width: 6px;
-}
-.incorrect-list::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 3px;
+.final-score {
+  font-size: 1.3rem;
+  margin: 10px 0;
 }
 
 @media (max-width: 480px) {
   .container {
-    padding: 20px;
+    padding: 16px;
+    width: 92%;
+    max-height: 82dvh;
   }
-  h1 { font-size: 1.5rem; }
+  h1 { font-size: 1.3rem; }
+  h4 { margin-bottom: 10px; font-size: 0.9rem; }
+  .question { font-size: 1rem; margin-bottom: 15px; }
+  .option { padding: 10px 12px; font-size: 0.95rem; }
+  .button { padding: 12px 20px; }
+}
+
+/* Landscape fix for small heights */
+@media (max-height: 500px) {
+  .container {
+    flex-direction: row;
+    max-width: 90vw;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  h1, h4 { text-align: left; margin-bottom: 5px; }
+  .button { width: auto; min-width: 120px; }
 }
