@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Talha - Tic Tac Toe</title>
-
-    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
-	<!-- Also uploaded the demo of this code in a gif : https://c.tenor.com/x8v1oNUOmg4AAAAd/tenor.gif-->
-	<!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
-
-	<!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
-	<!-- More html-css-js Games Calculators Games Cards Elements Projects on https://www.github.com/he-is-talha --> 
-	<!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
-
-	<link rel="icon" href="https://i.ibb.co/M6KTWnf/pic.jpg">
+    <link rel="icon" href="https://i.ibb.co/M6KTWnf/pic.jpg">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <h1>Tik Tac Toe Game</h1>
+    <h1>Tic Tac Toe Game</h1>
+
+    <!-- Mode Selector -->
+    <div class="mode-select">
+        <button id="mode-ai" class="mode-btn active">🤖 vs AI</button>
+        <button id="mode-pvp" class="mode-btn">👥 2 Players</button>
+    </div>
+
+    <!-- Score Board -->
+    <div class="scoreboard">
+        <div class="score-card">
+            <span class="score-label">Player X</span>
+            <span class="score-num" id="score-x">0</span>
+        </div>
+        <div class="score-card">
+            <span class="score-label">Ties</span>
+            <span class="score-num" id="score-ties">0</span>
+        </div>
+        <div class="score-card">
+            <span class="score-label" id="label-o">AI (O)</span>
+            <span class="score-num" id="score-o">0</span>
+        </div>
+    </div>
+
     <div class="container">
         <div data-index="0" class="box"></div>
         <div data-index="1" class="box"></div>
@@ -32,10 +44,13 @@
         <div data-index="7" class="box"></div>
         <div data-index="8" class="box"></div>
     </div>
-    <div class="status"></div>
-    <button class="restartBtn">Restart 🔁</button>
+
+    <div class="status">Now "X" Turn</div>
+    <div class="btn-container">
+        <button class="restartBtn">Restart 🔁</button>
+        <button class="resetScoreBtn">Reset Score 🗑️</button>
+    </div>
 
     <script src="index.js"></script>
 </body>
-
 </html>
