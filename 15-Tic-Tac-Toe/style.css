@@ -1,90 +1,193 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  border: none;
   font-family: "Poppins", sans-serif;
 }
 
 body {
-  width: 100vw;
-  height: 100vh;
-  background-color: lightslategray;
+  min-height: 100vh;
+  background-color: #334155;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding: 20px;
+  user-select: none;
 }
 
 h1 {
   color: white;
-  font-size: 32px;
-  padding: 5px 50px;
-  background-color: black;
+  font-size: 28px;
+  padding: 6px 36px;
+  background-color: #0f172a;
   border-radius: 50px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  word-spacing: 3px;
+  letter-spacing: 2px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.mode-select {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.mode-btn {
+  background: #1e293b;
+  color: #94a3b8;
+  border: 2px solid #475569;
+  border-radius: 20px;
+  padding: 6px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-btn:hover {
+  color: white;
+  border-color: #38bdf8;
+}
+
+.mode-btn.active {
+  background: #38bdf8;
+  color: #0f172a;
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.scoreboard {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.score-card {
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 10px;
+  padding: 6px 18px;
+  text-align: center;
+  min-width: 90px;
+}
+
+.score-label {
+  font-size: 12px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  display: block;
+}
+
+.score-num {
+  font-size: 20px;
+  font-weight: 700;
+  color: #38bdf8;
 }
 
 .container {
   display: grid;
-  grid-template-columns: repeat(3, auto);
-  border: 2px solid black;
+  grid-template-columns: repeat(3, 110px);
+  grid-template-rows: repeat(3, 110px);
+  gap: 8px;
+  background: #0f172a;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
 .box {
-  width: 120px;
-  height: 120px;
-  border: 2px solid black;
+  width: 110px;
+  height: 110px;
+  background: #1e293b;
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 25px;
+  transition: background 0.15s;
+}
+
+.box:hover {
+  background: #334155;
 }
 
 .box img {
-  width: 75px;
+  width: 70px;
+  height: 70px;
+  pointer-events: none;
 }
 
 .status {
-  margin: 20px 0;
-  padding: 10px 40px;
+  margin: 16px 0;
+  padding: 8px 30px;
   border-radius: 50px;
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 17px;
+  font-weight: 600;
   background-color: white;
-  color: black;
+  color: #0f172a;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.btn-container {
+  display: flex;
+  gap: 12px;
 }
 
 button {
-  padding: 10px 20px;
-  font-size: 20px;
-  font-weight: 500;
+  padding: 8px 18px;
+  font-size: 15px;
+  font-weight: 600;
   color: white;
-  background-color: black;
-  border-radius: 5px;
+  background-color: #0f172a;
+  border: 1px solid #475569;
+  border-radius: 8px;
   cursor: pointer;
+  transition: transform 0.1s, background-color 0.15s;
+}
+
+button:hover {
+  background-color: #1e293b;
 }
 
 button:active {
-  transform: scale(0.9);
+  transform: scale(0.95);
 }
 
 .win {
-  animation: winAnim ease-in-out 1s infinite;
+  animation: winAnim ease-in-out 0.8s infinite alternate;
 }
 
 @keyframes winAnim {
   0% {
-    background-color: green;
+    background-color: #10b981;
   }
   100% {
-    background-color: lightgreen;
+    background-color: #34d399;
+  }
+}
+
+@media (max-width: 420px) {
+  .container {
+    grid-template-columns: repeat(3, 90px);
+    grid-template-rows: repeat(3, 90px);
+  }
+  .box {
+    width: 90px;
+    height: 90px;
+  }
+  .box img {
+    width: 55px;
+    height: 55px;
+  }
+  h1 {
+    font-size: 22px;
+    padding: 6px 20px;
   }
 }
