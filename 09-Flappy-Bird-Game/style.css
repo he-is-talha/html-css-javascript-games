@@ -1,10 +1,68 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  font-family: "Pacifico";
+  font-family: "Pacifico", cursive, sans-serif;
   display: flex;
   justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #1e293b;
+  user-select: none;
+}
+
+.game-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100vw;
+  padding: 10px;
+}
+
+.header-bar {
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #f8fafc;
+  padding: 8px 12px;
+  font-size: 1.3rem;
+}
+
+.btn-sound {
+  background: #334155;
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+}
+
+.btn-sound:hover {
+  background: #475569;
 }
 
 canvas {
-  border: 1x solid #0a3cda;
-  margin: 10px;
+  border: 2px solid #0f172a;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  max-width: 100%;
+  height: auto;
+  touch-action: manipulation;
+  background: #70c5ce;
+}
+
+.hints-bar {
+  margin-top: 10px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-family: sans-serif;
+  text-align: center;
 }
