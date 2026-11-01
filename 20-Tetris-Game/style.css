@@ -1,89 +1,220 @@
-body {
-  overflow: hidden;
-  background: #d7d7d7;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
+body {
+  background: radial-gradient(circle at center, #2c3e50, #1a252f);
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.tetris-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  max-width: 100%;
+}
+
 #tetris {
   width: 360px;
-  border: 1px solid black;
-  padding: 20px;
+  background: #111827;
+  border: 3px solid #374151;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: space-between;
 }
+
 #canvas {
   width: 200px;
   height: 440px;
-  background-color: #000;
+  background-color: #030712;
   position: relative;
   color: #fff;
+  border: 2px solid #1f2937;
+  border-radius: 4px;
+  overflow: hidden;
 }
+
 #canvas h1 {
   margin: 0;
   padding: 0;
   text-align: center;
-  font-size: 30px;
-  padding-top: 200px;
+  font-size: 26px;
+  padding-top: 180px;
+  color: #ef4444;
+  letter-spacing: 2px;
 }
+
 .piece {
-  border: 1px solid white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   position: absolute;
 }
 
 #start {
-  animation: blink 0.7s steps(2, start) infinite;
-  background: #e1ff5f;
-  border-radius: 2px;
-  color: #202020;
+  animation: blink 0.9s steps(2, start) infinite;
+  background: #10b981;
+  border-radius: 6px;
+  border: none;
+  color: #ffffff;
   cursor: pointer;
-  font-size: 28px;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 8px 12px;
+  width: 100%;
+  margin-top: 10px;
+  transition: transform 0.1s;
+}
+
+#start:active {
+  transform: scale(0.96);
 }
 
 @keyframes blink {
-  to {
-    outline: #e1ff5f solid 1px;
+  50% {
+    opacity: 0.6;
   }
 }
 
 .red {
-  color: #f00000;
+  color: #ef4444;
+  font-size: 11px;
+  margin-top: 10px;
+  text-align: center;
 }
 
 .square {
   position: absolute;
   width: 19px;
   height: 19px;
-  border: 1px solid white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
 }
-.type0 {
-  background-color: #a000f0;
-}
-.type1 {
-  background-color: #00f0f0;
-}
-.type2 {
-  background-color: #f0a000;
-}
-.type3 {
-  background-color: #0000f0;
-}
-.type4 {
-  background-color: #00f000;
-}
-.type5 {
-  background-color: #f00000;
-}
-.type6 {
-  background-color: #f0f000;
-}
+
+.type0 { background-color: #a855f7; }
+.type1 { background-color: #06b6d4; }
+.type2 { background-color: #f97316; }
+.type3 { background-color: #3b82f6; }
+.type4 { background-color: #22c55e; }
+.type5 { background-color: #ef4444; }
+.type6 { background-color: #eab308; }
+
 #next_shape {
   position: relative;
-  background-color: #000;
-  border: 1px solid white;
-  width: 110px;
-  height: 110px;
+  background-color: #030712;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 12px;
 }
+
 #info {
-  background-color: #000;
-  color: #fff;
-  float: right;
-  width: 110px;
-  height: 420px;
+  background-color: #1f2937;
+  color: #f3f4f6;
+  width: 118px;
+  height: 440px;
   padding: 10px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  font-size: 14px;
+}
+
+#info p {
+  margin: 6px 0;
+  font-weight: 600;
+}
+
+#info p span {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+/* Touch Controls */
+.touch-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 360px;
+  max-width: 100%;
+}
+
+.touch-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+}
+
+.touch-btn {
+  background: #374151;
+  color: #f9fafb;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  flex: 1;
+  text-align: center;
+  touch-action: manipulation;
+  transition: background-color 0.1s, transform 0.05s;
+}
+
+.touch-btn:active {
+  background: #4b5563;
+  transform: scale(0.95);
+}
+
+.touch-btn-dir {
+  font-size: 20px;
+  padding: 14px;
+  background: #2563eb;
+}
+
+.touch-btn-dir:active {
+  background: #1d4ed8;
+}
+
+.touch-btn-secondary {
+  background: #4b5563;
+}
+
+@media (max-width: 420px) {
+  body {
+    padding: 8px;
+  }
+  #tetris {
+    width: 320px;
+    padding: 10px;
+  }
+  #canvas {
+    width: 180px;
+    height: 396px;
+  }
+  #info {
+    width: 105px;
+    height: 396px;
+    font-size: 13px;
+  }
+  #next_shape {
+    width: 85px;
+    height: 85px;
+  }
+  .touch-controls {
+    width: 320px;
+  }
 }
