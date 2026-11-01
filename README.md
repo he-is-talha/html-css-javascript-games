@@ -54,6 +54,7 @@ This repository contains a collection of HTML, CSS, and JavaScript games. 🎯�
 | 48  | [Battleship Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/48-Battleship-Game)                       | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/48-Battleship-Game/)             |
 | 49  | [Nonogram Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/49-Nonogram-Game)                           | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/49-Nonogram-Game/)               |
 | 50  | [Lights Out Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/50-Lights-Out-Game)                       | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/50-Lights-Out-Game/)             |
+| 51  | [Word Search Puzzle Game](https://github.com/he-is-talha/html-css-javascript-games/tree/main/51-Word-Search-Puzzle-Game)       | [Live Demo](https://he-is-talha.github.io/html-css-javascript-games/51-Word-Search-Puzzle-Game/)     |
 
 ## Games Description
 
@@ -107,6 +108,7 @@ This repository contains a collection of HTML, CSS, and JavaScript games. 🎯�
 48. **Battleship Game**: Place your fleet on a 10×10 grid and trade shots with the AI. Sink all five ships to win. Easy random fire; Medium/Hard hunt after hits. 🚢
 49. **Nonogram Game**: Paint cells to match row and column clues. Easy 5×5 with hints; Medium 10×10; Hard 15×15. Mark empties with right-click or long-press. 🧩
 50. **Lights Out Game**: Toggle a light and its neighbors to turn the whole board off. Easy 3×3, Medium 5×5, Hard 7×7 — always solvable. 💡
+51. **Word Search Puzzle Game**: Find hidden words in a 10×10 grid across multiple categories (Web Dev, Tech, Animals, Space). Features procedural grid generation, mouse & touch drag selection, hints, timer, and Web Audio synthesis effects. 🔤
 
 ## License
 
