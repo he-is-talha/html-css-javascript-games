@@ -1,269 +1,263 @@
 document.addEventListener("DOMContentLoaded", () => {
   const gridDisplay = document.querySelector(".grid");
   const scoreDisplay = document.getElementById("score");
+  const bestScoreDisplay = document.getElementById("best-score");
   const resultDisplay = document.getElementById("result");
-  let squares = [];
-  const width = 4;
-  let score = 0;
+  const restartBtn = document.getElementById("btn-restart");
 
-  //create the playing board
+  const width = 4;
+  let squares = [];
+  let score = 0;
+  let bestScore = parseInt(localStorage.getItem("2048_best_score")) || 0;
+  bestScoreDisplay.innerText = bestScore;
+
   function createBoard() {
+    gridDisplay.innerHTML = "";
+    squares = [];
     for (let i = 0; i < width * width; i++) {
-      square = document.createElement("div");
-      square.innerHTML = 0;
+      const square = document.createElement("div");
+      square.innerHTML = "";
       gridDisplay.appendChild(square);
       squares.push(square);
     }
     generate();
     generate();
+    updateTileStyles();
   }
-  createBoard();
 
-  //generate a new number
   function generate() {
-    randomNumber = Math.floor(Math.random() * squares.length);
-    if (squares[randomNumber].innerHTML == 0) {
-      squares[randomNumber].innerHTML = 2;
-      checkForGameOver();
-    } else generate();
+    const emptyIndices = squares
+      .map((sq, idx) => (sq.innerHTML === "" || sq.innerHTML === "0" ? idx : null))
+      .filter((val) => val !== null);
+
+    if (emptyIndices.length > 0) {
+      const randomIdx = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+      squares[randomIdx].innerHTML = Math.random() < 0.9 ? 2 : 4;
+    }
   }
 
-  function moveRight() {
-    for (let i = 0; i < 16; i++) {
-      if (i % 4 === 0) {
-        let totalOne = squares[i].innerHTML;
-        let totalTwo = squares[i + 1].innerHTML;
-        let totalThree = squares[i + 2].innerHTML;
-        let totalFour = squares[i + 3].innerHTML;
-        let row = [
-          parseInt(totalOne),
-          parseInt(totalTwo),
-          parseInt(totalThree),
-          parseInt(totalFour),
-        ];
+  function getBoardState() {
+    return squares.map((sq) => parseInt(sq.innerHTML) || 0);
+  }
 
-        let filteredRow = row.filter((num) => num);
-        let missing = 4 - filteredRow.length;
-        let zeros = Array(missing).fill(0);
-        let newRow = zeros.concat(filteredRow);
+  function setBoardState(state) {
+    for (let i = 0; i < squares.length; i++) {
+      squares[i].innerHTML = state[i] === 0 ? "" : state[i];
+    }
+  }
 
-        squares[i].innerHTML = newRow[0];
-        squares[i + 1].innerHTML = newRow[1];
-        squares[i + 2].innerHTML = newRow[2];
-        squares[i + 3].innerHTML = newRow[3];
+  function slideAndCombineRow(row) {
+    let filtered = row.filter((num) => num !== 0);
+    for (let i = 0; i < filtered.length - 1; i++) {
+      if (filtered[i] === filtered[i + 1]) {
+        filtered[i] *= 2;
+        score += filtered[i];
+        filtered.splice(i + 1, 1);
+      }
+    }
+    while (filtered.length < 4) {
+      filtered.push(0);
+    }
+    return filtered;
+  }
+
+  function moveLeft() {
+    for (let i = 0; i < 16; i += 4) {
+      const row = [
+        parseInt(squares[i].innerHTML) || 0,
+        parseInt(squares[i + 1].innerHTML) || 0,
+        parseInt(squares[i + 2].innerHTML) || 0,
+        parseInt(squares[i + 3].innerHTML) || 0
+      ];
+      const newRow = slideAndCombineRow(row);
+      for (let j = 0; j < 4; j++) {
+        squares[i + j].innerHTML = newRow[j] === 0 ? "" : newRow[j];
       }
     }
   }
 
-  function moveLeft() {
-    for (let i = 0; i < 16; i++) {
-      if (i % 4 === 0) {
-        let totalOne = squares[i].innerHTML;
-        let totalTwo = squares[i + 1].innerHTML;
-        let totalThree = squares[i + 2].innerHTML;
-        let totalFour = squares[i + 3].innerHTML;
-        let row = [
-          parseInt(totalOne),
-          parseInt(totalTwo),
-          parseInt(totalThree),
-          parseInt(totalFour),
-        ];
-
-        let filteredRow = row.filter((num) => num);
-        let missing = 4 - filteredRow.length;
-        let zeros = Array(missing).fill(0);
-        let newRow = filteredRow.concat(zeros);
-
-        squares[i].innerHTML = newRow[0];
-        squares[i + 1].innerHTML = newRow[1];
-        squares[i + 2].innerHTML = newRow[2];
-        squares[i + 3].innerHTML = newRow[3];
+  function moveRight() {
+    for (let i = 0; i < 16; i += 4) {
+      const row = [
+        parseInt(squares[i + 3].innerHTML) || 0,
+        parseInt(squares[i + 2].innerHTML) || 0,
+        parseInt(squares[i + 1].innerHTML) || 0,
+        parseInt(squares[i].innerHTML) || 0
+      ];
+      const newRow = slideAndCombineRow(row);
+      for (let j = 0; j < 4; j++) {
+        squares[i + 3 - j].innerHTML = newRow[j] === 0 ? "" : newRow[j];
       }
     }
   }
 
   function moveUp() {
-    for (let i = 0; i < 4; i++) {
-      let totalOne = squares[i].innerHTML;
-      let totalTwo = squares[i + width].innerHTML;
-      let totalThree = squares[i + width * 2].innerHTML;
-      let totalFour = squares[i + width * 3].innerHTML;
-      let column = [
-        parseInt(totalOne),
-        parseInt(totalTwo),
-        parseInt(totalThree),
-        parseInt(totalFour),
+    for (let c = 0; c < 4; c++) {
+      const col = [
+        parseInt(squares[c].innerHTML) || 0,
+        parseInt(squares[c + 4].innerHTML) || 0,
+        parseInt(squares[c + 8].innerHTML) || 0,
+        parseInt(squares[c + 12].innerHTML) || 0
       ];
-
-      let filteredColumn = column.filter((num) => num);
-      let missing = 4 - filteredColumn.length;
-      let zeros = Array(missing).fill(0);
-      let newColumn = filteredColumn.concat(zeros);
-
-      squares[i].innerHTML = newColumn[0];
-      squares[i + width].innerHTML = newColumn[1];
-      squares[i + width * 2].innerHTML = newColumn[2];
-      squares[i + width * 3].innerHTML = newColumn[3];
+      const newCol = slideAndCombineRow(col);
+      for (let r = 0; r < 4; r++) {
+        squares[c + r * 4].innerHTML = newCol[r] === 0 ? "" : newCol[r];
+      }
     }
   }
 
   function moveDown() {
-    for (let i = 0; i < 4; i++) {
-      let totalOne = squares[i].innerHTML;
-      let totalTwo = squares[i + width].innerHTML;
-      let totalThree = squares[i + width * 2].innerHTML;
-      let totalFour = squares[i + width * 3].innerHTML;
-      let column = [
-        parseInt(totalOne),
-        parseInt(totalTwo),
-        parseInt(totalThree),
-        parseInt(totalFour),
+    for (let c = 0; c < 4; c++) {
+      const col = [
+        parseInt(squares[c + 12].innerHTML) || 0,
+        parseInt(squares[c + 8].innerHTML) || 0,
+        parseInt(squares[c + 4].innerHTML) || 0,
+        parseInt(squares[c].innerHTML) || 0
       ];
-
-      let filteredColumn = column.filter((num) => num);
-      let missing = 4 - filteredColumn.length;
-      let zeros = Array(missing).fill(0);
-      let newColumn = zeros.concat(filteredColumn);
-
-      squares[i].innerHTML = newColumn[0];
-      squares[i + width].innerHTML = newColumn[1];
-      squares[i + width * 2].innerHTML = newColumn[2];
-      squares[i + width * 3].innerHTML = newColumn[3];
-    }
-  }
-
-  function combineRow() {
-    for (let i = 0; i < 15; i++) {
-      if (squares[i].innerHTML === squares[i + 1].innerHTML) {
-        let combinedTotal =
-          parseInt(squares[i].innerHTML) + parseInt(squares[i + 1].innerHTML);
-        squares[i].innerHTML = combinedTotal;
-        squares[i + 1].innerHTML = 0;
-        score += combinedTotal;
-        scoreDisplay.innerHTML = score;
+      const newCol = slideAndCombineRow(col);
+      for (let r = 0; r < 4; r++) {
+        squares[c + (3 - r) * 4].innerHTML = newCol[r] === 0 ? "" : newCol[r];
       }
     }
-    checkForWin();
   }
 
-  function combineColumn() {
-    for (let i = 0; i < 12; i++) {
-      if (squares[i].innerHTML === squares[i + width].innerHTML) {
-        let combinedTotal =
-          parseInt(squares[i].innerHTML) +
-          parseInt(squares[i + width].innerHTML);
-        squares[i].innerHTML = combinedTotal;
-        squares[i + width].innerHTML = 0;
-        score += combinedTotal;
-        scoreDisplay.innerHTML = score;
-      }
-    }
-    checkForWin();
-  }
+  function handleMove(directionFn) {
+    const beforeState = getBoardState();
+    directionFn();
+    const afterState = getBoardState();
 
-  //assign functions to keyCodes
-  function control(e) {
-    if (e.keyCode === 37) {
-      keyLeft();
-    } else if (e.keyCode === 38) {
-      keyUp();
-    } else if (e.keyCode === 39) {
-      keyRight();
-    } else if (e.keyCode === 40) {
-      keyDown();
+    const changed = beforeState.some((val, idx) => val !== afterState[idx]);
+    if (changed) {
+      generate();
+      updateScore();
+      updateTileStyles();
+      checkForWin();
+      checkForGameOver();
     }
   }
-  document.addEventListener("keyup", control);
 
-  function keyRight() {
-    moveRight();
-    combineRow();
-    moveRight();
-    generate();
+  function updateScore() {
+    scoreDisplay.innerText = score;
+    if (score > bestScore) {
+      bestScore = score;
+      localStorage.setItem("2048_best_score", bestScore);
+      bestScoreDisplay.innerText = bestScore;
+    }
   }
 
-  function keyLeft() {
-    moveLeft();
-    combineRow();
-    moveLeft();
-    generate();
-  }
-
-  function keyUp() {
-    moveUp();
-    combineColumn();
-    moveUp();
-    generate();
-  }
-
-  function keyDown() {
-    moveDown();
-    combineColumn();
-    moveDown();
-    generate();
-  }
-
-  //check for the number 2048 in the squares to win
   function checkForWin() {
     for (let i = 0; i < squares.length; i++) {
-      if (squares[i].innerHTML == 2048) {
-        resultDisplay.innerHTML = "You WIN";
-        document.removeEventListener("keyup", control);
-        setTimeout(() => clear(), 3000);
+      if (squares[i].innerHTML === "2048") {
+        resultDisplay.innerHTML = "🎉 <b>You WIN!</b> Keep going for higher score!";
+        break;
       }
     }
   }
 
-  //check if there are no zeros on the board to lose
+  // Accurate Game Over Detection: No empty cells AND no adjacent matching tiles
   function checkForGameOver() {
-    let zeros = 0;
-    for (let i = 0; i < squares.length; i++) {
-      if (squares[i].innerHTML == 0) {
-        zeros++;
+    const board = getBoardState();
+
+    // Check if any empty cell exists
+    if (board.includes(0)) return;
+
+    // Check horizontal neighbors
+    for (let r = 0; r < 4; r++) {
+      for (let c = 0; c < 3; c++) {
+        if (board[r * 4 + c] === board[r * 4 + c + 1]) return;
       }
     }
-    if (zeros === 0) {
-      resultDisplay.innerHTML = "You LOSE";
-      document.removeEventListener("keyup", control);
-      setTimeout(() => clear(), 3000);
+
+    // Check vertical neighbors
+    for (let c = 0; c < 4; c++) {
+      for (let r = 0; r < 3; r++) {
+        if (board[r * 4 + c] === board[(r + 1) * 4 + c]) return;
+      }
+    }
+
+    // No valid moves left
+    resultDisplay.innerHTML = "Game Over! <b>No moves left.</b>";
+  }
+
+  function updateTileStyles() {
+    const colors = {
+      "": { bg: "#cdc1b4", color: "#776e65" },
+      0: { bg: "#cdc1b4", color: "#776e65" },
+      2: { bg: "#eee4da", color: "#776e65" },
+      4: { bg: "#ede0c8", color: "#776e65" },
+      8: { bg: "#f2b179", color: "#f9f6f2" },
+      16: { bg: "#f59563", color: "#f9f6f2" },
+      32: { bg: "#f67c5f", color: "#f9f6f2" },
+      64: { bg: "#f65e3b", color: "#f9f6f2" },
+      128: { bg: "#edcf72", color: "#f9f6f2", font: "38px" },
+      256: { bg: "#edcc61", color: "#f9f6f2", font: "38px" },
+      512: { bg: "#edc850", color: "#f9f6f2", font: "38px" },
+      1024: { bg: "#edc53f", color: "#f9f6f2", font: "30px" },
+      2048: { bg: "#edc22e", color: "#f9f6f2", font: "30px" }
+    };
+
+    squares.forEach((sq) => {
+      const val = sq.innerHTML.trim();
+      const style = colors[val] || { bg: "#3c3a32", color: "#f9f6f2", font: "26px" };
+      sq.style.backgroundColor = style.bg;
+      sq.style.color = style.color;
+      if (style.font) {
+        sq.style.fontSize = style.font;
+      } else {
+        sq.style.fontSize = "";
+      }
+    });
+  }
+
+  // Keyboard Navigation
+  function control(e) {
+    if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
+      e.preventDefault();
+      handleMove(moveLeft);
+    } else if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
+      e.preventDefault();
+      handleMove(moveRight);
+    } else if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") {
+      e.preventDefault();
+      handleMove(moveUp);
+    } else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") {
+      e.preventDefault();
+      handleMove(moveDown);
     }
   }
+  document.addEventListener("keydown", control);
 
-  //clear timer
-  function clear() {
-    clearInterval(myTimer);
-  }
+  // Mobile Touch Swipe Detection
+  let touchStartX = 0;
+  let touchStartY = 0;
 
-  //add colours
-  function addColours() {
-    for (let i = 0; i < squares.length; i++) {
-      if (squares[i].innerHTML == 0)
-        squares[i].style.backgroundColor = "#afa192";
-      else if (squares[i].innerHTML == 2)
-        squares[i].style.backgroundColor = "#eee4da";
-      else if (squares[i].innerHTML == 4)
-        squares[i].style.backgroundColor = "#ede0c8";
-      else if (squares[i].innerHTML == 8)
-        squares[i].style.backgroundColor = "#f2b179";
-      else if (squares[i].innerHTML == 16)
-        squares[i].style.backgroundColor = "#ffcea4";
-      else if (squares[i].innerHTML == 32)
-        squares[i].style.backgroundColor = "#e8c064";
-      else if (squares[i].innerHTML == 64)
-        squares[i].style.backgroundColor = "#ffab6e";
-      else if (squares[i].innerHTML == 128)
-        squares[i].style.backgroundColor = "#fd9982";
-      else if (squares[i].innerHTML == 256)
-        squares[i].style.backgroundColor = "#ead79c";
-      else if (squares[i].innerHTML == 512)
-        squares[i].style.backgroundColor = "#76daff";
-      else if (squares[i].innerHTML == 1024)
-        squares[i].style.backgroundColor = "#beeaa5";
-      else if (squares[i].innerHTML == 2048)
-        squares[i].style.backgroundColor = "#d7d4f0";
+  gridDisplay.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  gridDisplay.addEventListener("touchend", (e) => {
+    const touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+    const dx = touchEndX - touchStartX;
+    const dy = touchEndY - touchStartY;
+
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 25) {
+      if (dx > 0) handleMove(moveRight);
+      else handleMove(moveLeft);
+    } else if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 25) {
+      if (dy > 0) handleMove(moveDown);
+      else handleMove(moveUp);
     }
-  }
-  addColours();
+  }, { passive: true });
 
-  var myTimer = setInterval(addColours, 50);
+  // Restart Button
+  restartBtn.addEventListener("click", () => {
+    score = 0;
+    scoreDisplay.innerText = score;
+    resultDisplay.innerHTML = "Join the numbers and get to the <b>2048</b> tile!";
+    createBoard();
+  });
+
+  createBoard();
 });
