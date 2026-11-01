@@ -1,26 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Talha - Minesweeper</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="script.js"></script>
     <link rel="icon" href="https://i.ibb.co/M6KTWnf/pic.jpg" />
-
-    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
-    <!-- Also uploaded the demo of this code in a gif : https://c.tenor.com/x8v1oNUOmg4AAAAd/tenor.gif-->
-    <!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
-
-    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
-    <!-- More html-css-js Games Calculators Games Cards Elements Projects on https://www.github.com/he-is-talha -->
-    <!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
   </head>
 
   <body>
-    <h1>Mines: <span id="mines-count">0</span></h1>
-    <div id="board"></div>
-    <br />
-    <button id="flag-button">🚩</button>
+    <div class="minesweeper-container">
+      <div class="game-header">
+        <div class="digital-display" id="mines-display">010</div>
+        <button id="reset-button" class="face-btn" title="Restart Game">😊</button>
+        <div class="digital-display" id="timer-display">000</div>
+      </div>
+
+      <div id="board"></div>
+
+      <div class="controls-bar">
+        <button id="flag-button" class="tool-btn">🚩 Flag Mode: OFF</button>
+        <span class="hint-text">Desktop: Left-click reveal, Right-click flag</span>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
   </body>
 </html>
