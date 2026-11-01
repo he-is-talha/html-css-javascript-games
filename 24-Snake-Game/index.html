@@ -3,37 +3,43 @@
   <head>
     <meta charset="utf-8">
     <title>Talha - Snake Game</title>
-
-    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
-    <!-- Also uploaded the demo of this code in a gif : https://c.tenor.com/x8v1oNUOmg4AAAAd/tenor.gif-->
-    <!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
-
-    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
-    <!-- More html-css-js Games Calculators Games Cards Elements Projects on https://www.github.com/he-is-talha --> 
-    <!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
-
     <link rel="icon" href="https://i.ibb.co/M6KTWnf/pic.jpg">
-
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <script src="script.js" defer></script>
   </head>
   <body>
- 
     <div class="wrapper">
       <div class="game-details">
         <span class="score">Score: 0</span>
+        <span class="controls-hint"><i class="fa-solid fa-keyboard"></i> Arrows / WASD | Space to Pause</span>
         <span class="high-score">High Score: 0</span>
       </div>
-      <div class="play-board"></div>
+
+      <div class="play-board-container">
+        <div class="play-board"></div>
+        <div class="game-overlay hidden" id="game-overlay">
+          <div class="overlay-card">
+            <h2 id="overlay-title">Game Over!</h2>
+            <p id="overlay-msg">You hit the wall or yourself!</p>
+            <div class="overlay-score-box">
+              <span>Score: <strong id="overlay-score">0</strong></span>
+              <span>Best: <strong id="overlay-best">0</strong></span>
+            </div>
+            <button id="btn-restart" class="btn-play">
+              <i class="fa-solid fa-rotate-right"></i> Play Again
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="controls">
-        <i data-key="ArrowLeft" class="fa-solid fa-arrow-left-long"></i>
-        <i data-key="ArrowUp" class="fa-solid fa-arrow-up-long"></i>
-        <i data-key="ArrowRight" class="fa-solid fa-arrow-right-long"></i>
-        <i data-key="ArrowDown" class="fa-solid fa-arrow-down-long"></i>
+        <i data-key="ArrowLeft" class="fa-solid fa-arrow-left-long" aria-label="Left"></i>
+        <i data-key="ArrowUp" class="fa-solid fa-arrow-up-long" aria-label="Up"></i>
+        <i data-key="ArrowRight" class="fa-solid fa-arrow-right-long" aria-label="Right"></i>
+        <i data-key="ArrowDown" class="fa-solid fa-arrow-down-long" aria-label="Down"></i>
       </div>
     </div>
-
-  
-</body></html>
+  </body>
+</html>
