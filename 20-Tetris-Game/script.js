@@ -231,36 +231,50 @@
     },
     bindKeyEvents: function () {
       var me = this;
-      var event = "keypress";
-      if (this.isSafari() || this.isIE()) {
-        event = "keydown";
-      }
       var cb = function (e) {
         me.handleKey(e);
       };
-      if (window.addEventListener) {
-        document.addEventListener(event, cb, false);
-      } else {
-        document.attachEvent("on" + event, cb);
-      }
+      document.addEventListener("keydown", cb, false);
+
+      // Touch controls binding for mobile devices
+      var tRotate = document.getElementById("t-rotate");
+      var tPause = document.getElementById("t-pause");
+      var tLeft = document.getElementById("t-left");
+      var tDown = document.getElementById("t-down");
+      var tRight = document.getElementById("t-right");
+
+      if (tRotate) tRotate.addEventListener("click", function () { me.move("RT"); });
+      if (tPause) tPause.addEventListener("click", function () { me.togglePause(); });
+      if (tLeft) tLeft.addEventListener("click", function () { me.move("L"); });
+      if (tDown) tDown.addEventListener("click", function () { me.move("D"); });
+      if (tRight) tRight.addEventListener("click", function () { me.move("R"); });
     },
     handleKey: function (e) {
       var c = this.whichKey(e);
-      var dir = "";
       switch (c) {
         case 37:
+        case 65:
+          if (e.preventDefault) e.preventDefault();
           this.move("L");
           break;
         case 38:
+        case 87:
+          if (e.preventDefault) e.preventDefault();
           this.move("RT");
           break;
         case 39:
+        case 68:
+          if (e.preventDefault) e.preventDefault();
           this.move("R");
           break;
         case 40:
+        case 83:
+          if (e.preventDefault) e.preventDefault();
           this.move("D");
           break;
-        case 27: //esc: pause
+        case 27:
+        case 80:
+          if (e.preventDefault) e.preventDefault();
           this.togglePause();
           break;
         default:

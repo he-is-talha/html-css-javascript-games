@@ -1,30 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Talha - Tetris Game</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
     <link rel="icon" href="https://i.ibb.co/M6KTWnf/pic.jpg" />
-
-    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
-    <!-- Also uploaded the demo of this code in a gif : https://c.tenor.com/x8v1oNUOmg4AAAAd/tenor.gif-->
-    <!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
-
-    <!-- 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻-->
-    <!-- More html-css-js Games Calculators Games Cards Elements Projects on https://www.github.com/he-is-talha -->
-    <!-- 👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻👆🏻-->
   </head>
   <body>
-    <div id="tetris">
-      <div id="info">
-        <div id="next_shape"></div>
-        <p id="level">Level: <span></span></p>
-        <p id="lines">Lines: <span></span></p>
-        <p id="score">Score: <span></span></p>
-        <p id="time">Time: <span></span></p>
-        <button id="start">Start</button>
-        <p class="red">Press the Esc button to pause<span></span></p>
+    <div class="tetris-wrapper">
+      <div id="tetris">
+        <div id="info">
+          <div id="next_shape"></div>
+          <p id="level">Level: <span></span></p>
+          <p id="lines">Lines: <span></span></p>
+          <p id="score">Score: <span></span></p>
+          <p id="time">Time: <span></span></p>
+          <button id="start">Start</button>
+          <p class="red">Press Esc to pause<span></span></p>
+        </div>
+        <div id="canvas"></div>
       </div>
-      <div id="canvas"></div>
+
+      <!-- Mobile Touch Controls -->
+      <div id="touch-controls" class="touch-controls">
+        <div class="touch-row">
+          <button type="button" class="touch-btn" id="t-rotate" aria-label="Rotate">↻ Rotate</button>
+          <button type="button" class="touch-btn touch-btn-secondary" id="t-pause" aria-label="Pause">❚❚ Pause</button>
+        </div>
+        <div class="touch-row dpad-row">
+          <button type="button" class="touch-btn touch-btn-dir" id="t-left" aria-label="Left">◀</button>
+          <button type="button" class="touch-btn touch-btn-dir" id="t-down" aria-label="Down">▼</button>
+          <button type="button" class="touch-btn touch-btn-dir" id="t-right" aria-label="Right">▶</button>
+        </div>
+      </div>
     </div>
     <script type="text/javascript" src="script.js"></script>
   </body>
