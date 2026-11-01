@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Word Search Puzzle Game</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="https://i.ibb.co/M6KTWnf/pic.jpg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <h1><i class="fa-solid fa-font"></i> Word Search Puzzle</h1>
+      <p class="subtitle">Find all hidden words horizontally, vertically, or diagonally!</p>
+    </header>
+
+    <div class="stats-panel">
+      <div class="stat-card">
+        <span class="stat-label"><i class="fa-solid fa-list-check"></i> Found</span>
+        <span class="stat-value" id="found-count">0 / 0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label"><i class="fa-solid fa-clock"></i> Time</span>
+        <span class="stat-value" id="timer">00:00</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label"><i class="fa-solid fa-star"></i> Score</span>
+        <span class="stat-value" id="score">0</span>
+      </div>
+    </div>
+
+    <div class="controls-panel">
+      <div class="category-select-wrapper">
+        <label for="category-select"><i class="fa-solid fa-tags"></i> Category:</label>
+        <select id="category-select">
+          <option value="webdev">Web Development</option>
+          <option value="tech">Tech & Computing</option>
+          <option value="animals">Animals</option>
+          <option value="space">Space & Astronomy</option>
+        </select>
+      </div>
+      <div class="btn-group">
+        <button id="btn-hint" class="action-btn hint-btn" title="Reveal the first letter of a word">
+          <i class="fa-solid fa-lightbulb"></i> Hint (<span id="hint-count">3</span>)
+        </button>
+        <button id="btn-new-game" class="action-btn primary-btn" title="Start a new puzzle">
+          <i class="fa-solid fa-rotate-right"></i> New Game
+        </button>
+        <button id="btn-sound" class="action-btn sound-btn" title="Toggle Sound">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+      </div>
+    </div>
+
+    <main class="puzzle-area">
+      <div class="grid-wrapper">
+        <div id="word-grid" class="word-grid"></div>
+      </div>
+      <aside class="words-wrapper">
+        <h2><i class="fa-solid fa-magnifying-glass"></i> Words to Find</h2>
+        <ul id="word-list" class="word-list"></ul>
+      </aside>
+    </main>
+
+    <!-- Victory Modal -->
+    <div id="victory-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="trophy-icon"><i class="fa-solid fa-trophy"></i></div>
+        <h2>Congratulations!</h2>
+        <p>You found all the words in this puzzle!</p>
+        <div class="final-stats">
+          <p><strong>Final Time:</strong> <span id="final-time">00:00</span></p>
+          <p><strong>Total Score:</strong> <span id="final-score">0</span></p>
+        </div>
+        <button id="btn-play-again" class="action-btn primary-btn modal-btn">
+          <i class="fa-solid fa-play"></i> Play Another Puzzle
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
